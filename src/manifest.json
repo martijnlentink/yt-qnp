@@ -1,0 +1,46 @@
+{
+	"manifest_version": 2,
+	
+	"name": "Queue 'n Play",
+	"description": "__MSG_appDescription__",
+	"version": "0.1",  
+	"homepage_url": "http://path.to/home",
+
+	"icons": { 
+		"16": "img/icon.16.png",
+        "48": "img/icon.48.png",
+        "128": "img/icon.128.png" 
+	},
+	
+	"permissions": [
+		"notifications",
+		"webRequest",	
+		"*://*.youtube.com/*", 
+		"*://*.ytimg.com/*", 
+		"webRequestBlocking"
+	],
+
+	"content_scripts": [
+		{
+			"matches": ["*://*.youtube.com/*"],
+			"js": [
+				"js/contentscript.js"
+			],
+			"run_at": "document_end"
+		}
+	],
+	
+	"background": 
+	{ 
+		"scripts": ["js/background.js"] 
+	},
+	
+	"web_accessible_resources": [
+		"js/core/modules.js",
+		"js/core/ytqnp.js"
+	],
+	
+	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+	
+	"default_locale": "en"
+}
