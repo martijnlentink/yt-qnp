@@ -8,6 +8,8 @@ injectLf("chrome-extension://hfkeoiiodkbeflgjeifnjjcpjeoglcck/js/core/ytqnp.js")
 
 injectCss(".qnp-button { display: block; margin-top: -23px; margin-left: 2px; position: absolute; background: no-repeat url('http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp') -462px -343px; background-color: #f0f0f0; background-size: auto; width: 20px; height: 21px; }");
 injectCss(".qnp-button:hover { display: block; margin-top: -23px; margin-left: 2px; position: absolute; background: no-repeat url('http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp') -462px -343px; background-color: #f0f0f0; background-size: auto; width: 20px; height: 21px; }");
+injectCss("#qnp-playlist-container { width: 480px; height: 320px; position: fixed; bottom: 300px; right: 10px; z-index: 9999; }");
+injectCss("#qnp-playlist { height: 480px; }");
 
 // Main method.
 inject(function () {

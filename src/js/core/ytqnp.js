@@ -73,38 +73,60 @@ function ytqnp() {
 				qnpButtons[b].parentElement.removeChild(this[b]);
 			}
 		}
+		
+		// Also hide the playlist
+		if(document.querySelectorAll('#qnp-playlist-container').length == 1)
+		{
+			document.querySelectorAll('#qnp-playlist-container').style.display = 'none';
+		}
 	}
 	
 	// Create the UI for the playlist
 	function _createPlaylistUI()
-	{
+	{	
 		// It should only show when SnP is cornerized
-		if(windows.YTSNPIsCorner)
+		if(window.YTSNPIsCorner)
 		{
-			// Create the container div
-			var div = document.createElement('div');
-			div.className = "playlist-videos-container yt-scrollbar-dark yt-scrollbar"
+			console.info('playlist ui');
 			
-			// Create the playlist
-			var ol = document.createElement('ol');
-			ol.id = "qnp-playlist";
-			ol.className = "playlist-videos-list yt-uix-scroller";
-			ol.setAttribute('data-scroller-offset', '0');
-			ol.setAttribute('data-scroller-mousewheellistener');
-			ol.setAttribute('data-scroller-scroll-listener');
+			var playlistq = document.querySelectorAll('#qnp-playlist-container');
 			
-			// Add the playlist to the body
-			div.appendChild(ol);			
-			document.body.appendChild(div);
-			
-			// Update the visible playlist
-			_updatePlaylist();
+			// Only add the playlist when it's not yet on the page
+			if(playlistq.length == 0)
+			{
+				// Create the container div
+				var div = document.createElement('div');
+				div.id = "qnp-playlist-container";
+				div.className = "playlist-videos-container yt-scrollbar-dark yt-scrollbar"
+
+				// Create the playlist
+				var ol = document.createElement('ol');
+				ol.id = "qnp-playlist";
+				ol.className = "playlist-videos-list yt-uix-scroller";
+				ol.setAttribute('data-scroller-offset', '0');
+				ol.setAttribute('data-scroller-mousewheellistener', '');
+				ol.setAttribute('data-scroller-scroll-listener', '');
+
+				// Add the playlist to the body
+				div.appendChild(ol);			
+				document.body.appendChild(div);
+				
+				// Update the visible playlist
+				_updatePlaylist();
+			} 
+			else if(playlistq.length == 1)
+			{
+				// Show the playlist
+				playlistq[0].style.display = "block;"
+			}
 		}
 	}
 	
 	// Update the visual playlist
 	function _updatePlaylist()
 	{		
+		console.info('updating playlist');
+	
 		for(var v = 0; v < _playlist.length-1; v++)
 		{
 			// Reference the current video
@@ -158,6 +180,9 @@ function ytqnp() {
 			li.appendChild(eIndex);
 			li.appendChild(eLink);
 			li.appendChild(eDesc);
+			console.info(li);
+			// Add the item to the playlist
+			document.querySelectorAll('#qnp-playlist')[0].appendChild(li);
 		}
 	}
 	
