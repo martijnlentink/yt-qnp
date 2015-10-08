@@ -20,6 +20,7 @@ function ytqnp() {
 		{
 			// Remove the buttons
 			_hideQueueButtons();
+			_hidePlaylistUI();
 		}
 	}
 	
@@ -40,7 +41,12 @@ function ytqnp() {
 			if(videoItems[b].querySelectorAll('.qnp-btn-' + videoId).length == 0)
 			{
 				var videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink.yt-uix-tile-link')[0].text
-				var videoDur = videoItems[b].querySelectorAll('.video-time')[0].innerHTML;
+				var videoAut = videoItems[b].parentElement.querySelectorAll('.g-hovercard')[0].innerHTML
+				
+				// Replace colons by their html char
+				videoTitle = videoTitle.replace("'", '%27');
+				videoTitle = videoTitle.replace('(', '%28');
+				videoTitle = videoTitle.replace(')', '%29');
 				
 				// Create the button and add the required attributes
 				var button = document.createElement('button');
@@ -50,7 +56,7 @@ function ytqnp() {
 				button.setAttribute('title', 'Add to queue');
 				button.setAttribute('data-video-ids', videoId); // This is the video to play
 				button.setAttribute('data-tooltip-text', 'Add to queue');
-				button.setAttribute('onclick', "circularify.ytqnp.queue('" + videoId + ",qnp," + videoTitle + ",qnp," + videoDur + "')");
+				button.setAttribute('onclick', "circularify.ytqnp.queue('" + videoId + ",qnp," + videoTitle + ",qnp," + videoAut + "')");
 				// Add the button
 				videoItems[b].appendChild(button);
 			}
@@ -72,13 +78,7 @@ function ytqnp() {
 				// Remove the buttons
 				qnpButtons[b].parentElement.removeChild(this[b]);
 			}
-		}
-		
-		// Also hide the playlist
-		if(document.querySelectorAll('#qnp-playlist-container').length == 1)
-		{
-			document.querySelectorAll('#qnp-playlist-container').style.display = 'none';
-		}
+		}		
 	}
 	
 	// Create the UI for the playlist
@@ -94,10 +94,68 @@ function ytqnp() {
 			// Only add the playlist when it's not yet on the page
 			if(playlistq.length == 0)
 			{
+				// YouTube element
+				//var yt = document.querySelectorAll('#player-playlist')[0];
+				
+				// Playlist container
+				var plst = document.createElement('div');
+				plst.id = "qnp-playlist-container";
+				plst.className = "watch-playlist";
+			
+				// Main Content
+				var cnt = document.createElement('div');
+				cnt.className = "main-content";
+			
+				// Playlist header
+				var divH = document.createElement('div');
+				divH.className = "playlist-header";
+				
+					var hcnt = document.createElement('div');
+					hcnt.className = "playlist-header-content";
+					hcnt.setAttribute('data-list-title', "Queue 'n Playlist");
+					
+					var btnArea = document.createElement('div');
+					btnArea.className = "app-bar-playlist-controls";
+					
+						var aBtn = document.createElement('a');
+						aBtn.className = "yt-uix-button-player-controls";
+						aBtn.setAttribute('title', 'Empty playlist');
+						aBtn.setAttribute('data-tooltip-text', 'Empty playlist');
+						
+							var sWrap = document.createElement('span');
+							sWrap.className = "yt-uix-button-icon-wrapper";
+							
+							var sIcon = document.createElement('span');
+							sIcon.className = "yt-uix-button-icon qnp-btn-playlist-delete yt-sprite";
+						
+					
+					// Info element
+					var info = document.createElement('div');
+					info.className = "playlist-info";
+					
+						// Info header
+						var h3 = document.createElement('h3');
+						h3.className = "playlist-title";
+						
+						var h3a = document.createElement('a');
+						h3a.className = "yt-uix-sessionlink";
+						h3a.innerHTML = "Queue 'n Playlist";
+					
+						// Details
+						var det = document.createElement('ul');
+						det.className = "playlist-details";
+			
+							var la = document.createElement('li');
+							la.className = "author-attribution";
+							la.innerHTML = "by you";
+					
+					// Clearfix					
+					var hcfx = document.createElement('div');
+					hcfx.className = "control-bar clearfix";
+			
 				// Create the container div
-				var div = document.createElement('div');
-				div.id = "qnp-playlist-container";
-				div.className = "playlist-videos-container yt-scrollbar-dark yt-scrollbar"
+				var divC = document.createElement('div');
+				divC.className = "playlist-videos-container yt-scrollbar-dark yt-scrollbar"
 
 				// Create the playlist
 				var ol = document.createElement('ol');
@@ -107,12 +165,45 @@ function ytqnp() {
 				ol.setAttribute('data-scroller-mousewheellistener', '');
 				ol.setAttribute('data-scroller-scroll-listener', '');
 
-				// Add the playlist to the body
-				div.appendChild(ol);			
-				document.body.appendChild(div);
+				// Wrap up the info header
+				h3.appendChild(h3a);
+				det.appendChild(la);
+				h3.appendChild(det);
+				info.appendChild(h3);				
+				sWrap.appendChild(sIcon);
+				aBtn.appendChild(sWrap);
+				btnArea.appendChild(aBtn);
+				hcnt.appendChild(btnArea);
+				hcnt.appendChild(info);
+				divH.appendChild(hcnt);
+				divH.appendChild(hcfx);
 				
-				// Update the visible playlist
-				_updatePlaylist();
+				// Add the playlist elements
+				cnt.appendChild(divH);
+				divC.appendChild(ol);	
+				cnt.appendChild(divC);
+				
+				// Add to container
+				plst.appendChild(cnt);
+				
+				// Add the playlist
+				document.body.appendChild(plst);
+				
+				if(_playlist.length > 0)
+				{
+					// Update the visible playlist
+					_updatePlaylist();
+				} else 
+				{
+					// If the playlist is empty, show a message.
+					var playlist = document.querySelectorAll('#qnp-playlist')[0];
+					var li = document.createElement('li');
+					var span = document.createElement('span');
+					span.style.padding = "0 10px";
+					span.innerHTML = "All dem empty spaces..";
+					li.appendChild(span);
+					playlist.appendChild(li);
+				}
 			} 
 			else if(playlistq.length == 1)
 			{
@@ -122,12 +213,32 @@ function ytqnp() {
 		}
 	}
 	
+	// Hide the playlist
+	function _hidePlaylistUI()
+	{
+		// Reference the playlist container
+		var plst = document.querySelectorAll('#qnp-playlist-container');
+		
+		// If the player exists
+		if(plst.length == 1)
+		{
+			// hide the playlist
+			plst[0].style.display = 'none';
+		}
+	}
+	
 	// Update the visual playlist
 	function _updatePlaylist()
 	{		
-		console.info('updating playlist');
-	
-		for(var v = 0; v < _playlist.length-1; v++)
+		
+		// Empty the playlist UI
+		var qnpNode = document.querySelectorAll('#qnp-playlist')[0];
+		while (qnpNode.firstChild) {
+			qnpNode.removeChild(qnpNode.firstChild);
+		}
+		
+		// Loop through the items in the playlist
+		for(var v = 0; v < _playlist.length; v++)
 		{
 			// Reference the current video
 			var current = _playlist[v];
@@ -137,15 +248,16 @@ function ytqnp() {
 			li.setAttribute('data-video-title', current.title);
 			li.setAttribute('data-video-id', current.id);
 			li.setAttribute('data-index', v);
-		
+			
 			var eIndex = document.createElement('span');
 			eIndex.className = "index";
-			eIndex.innerHTML = v == 0 ? "&#9658;" : v; // Show ► for playing, or index
+			eIndex.innerHTML = v + 1;
 			
 			var eLink = document.createElement('a');
+			eLink.className = "yt-uix-sessionlink spf-link playlist-video clearfix spf-link";
 			
 			var eThumb = document.createElement('span');
-			eThumb.className = "yt-thumb yt-thumb-72";
+			eThumb.className = "video-thumb yt-thumb yt-thumb-72";
 			var eThumbDef = document.createElement('span');
 			eThumbDef.className = "yt-thumb-default";
 			var eThumbClip = document.createElement('span');
@@ -153,9 +265,12 @@ function ytqnp() {
 			var img = document.createElement('img');
 			img.setAttribute('src', 'https://i.ytimg.com/vi/' + current.id + '/default.jpg');
 			img.setAttribute('width', '72');
+			var spacer = document.createElement('span');
+			spacer.className = 'vertical-align';
 			
 			// Wrap up the link tag
 			eThumbClip.appendChild(img);
+			eThumbClip.appendChild(spacer);
 			eThumbDef.appendChild(eThumbClip);
 			eThumb.appendChild(eThumbDef);
 			eLink.appendChild(eThumb);
@@ -169,20 +284,21 @@ function ytqnp() {
 			var uploader = document.createElement('span');
 			uploader.className = "video-uploader-byline";
 			var uplsub = document.createElement('span');
-			uplsub.innerHTML = current.by;
+			uplsub.innerHTML = "by <strong>" + current.by + "</strong>";
 			
 			// Wrap up Description
 			eDesc.appendChild(title);
 			uploader.appendChild(uplsub);
-			eDesc.appendChild(uploader);			
+			eDesc.appendChild(uploader);
+			eLink.appendChild(eDesc);
 			
 			// Add all the elements
 			li.appendChild(eIndex);
 			li.appendChild(eLink);
-			li.appendChild(eDesc);
-			console.info(li);
+			
 			// Add the item to the playlist
-			document.querySelectorAll('#qnp-playlist')[0].appendChild(li);
+			qnpNode.appendChild(li);
+			
 		}
 	}
 	
@@ -247,7 +363,7 @@ function ytqnp() {
 					setTimeout(function() {
 						player.playVideo();
 						clearTimeout(this);
-					}, 3000);
+					}, 1000);
 				}
 			}
 		
