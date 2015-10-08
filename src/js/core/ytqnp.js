@@ -325,6 +325,13 @@ function ytqnp() {
 				eIndex.className = "index";
 				eIndex.innerHTML = v + 1;
 				
+				var eClose = document.createElement('a');
+				eClose.className = 'qnp-li-remove';
+				eClose.setAttribute('onclick', 'circularify.ytqnp.remove(' + v + ')');
+				
+					var eCIcon = document.createElement('span');
+					eCIcon.className = "yt-uix-button-icon qnp-btn-playlist-close yt-sprite";
+				
 				var eLink = document.createElement('a');
 				eLink.className = "yt-uix-sessionlink spf-link playlist-video clearfix spf-link";
 				
@@ -364,8 +371,12 @@ function ytqnp() {
 				eDesc.appendChild(uploader);
 				eLink.appendChild(eDesc);
 				
+				// Wrap up close
+				eClose.appendChild(eCIcon);
+				
 				// Add all the elements
 				li.appendChild(eIndex);
+				li.appendChild(eClose);
 				li.appendChild(eLink);
 				
 				// Add the item to the playlist
@@ -399,6 +410,13 @@ function ytqnp() {
 		{
 			console.error('9312.2 - There was an error queueing a video.');
 		}
+	}
+	
+	// Remove a video by index
+	function _removeVideo(index)
+	{	
+		_playlist.splice(index, 1);
+		_updatePlaylist();
 	}
 	
 	// Dequeue and return the first video
@@ -446,6 +464,7 @@ function ytqnp() {
 		playlist: _playlist,
 		queue: _queueVideo,
 		dequeue: _dequeueVideo,
+		remove: _removeVideo,
 		next: _playNext,
 		navigating: _navigating,
 		collapse: _collapsePlaylist,

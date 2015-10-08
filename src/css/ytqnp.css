@@ -35,6 +35,13 @@
 	height: 9px;
 } 
 
+.qnp-li-remove {
+	float: right;
+	margin: 0 6px;
+	line-height: 15px;
+	z-index: 9999;
+}
+
 .qnp-btn-playlist-collapse-in { 
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAANZJREFUOI3NkMttAkEQRKt3uTqPrigMlgPYyYIzEgcfMGA7HqsTsAyIFEAdBhEwvsxKA5pZeU9236pV9foD/HW1pWbXdXOSO1Vt3P0wGkDyC8CDiDyRFHffjQKoKkTkOckpyaYGKQLc/UjyCmCWWo+q2rr7968ACXJQ1SgiMwAQkSKkCkiQfTpn2kNIntz93HuaIUAKSa5jjNdcDwJCCBsA6yy8MbPPmwEjwmsze7v3FX8QQlgB2GatVzN7L3knlQWW2eSVmX3UNq39YAHgEmN8GQr/j/oBz1JSq+CjfRgAAAAASUVORK5CYII=); 
 	width: 16px; 
@@ -66,6 +73,7 @@
 	background-color: #222; 
 	height: 183px; 
 	overflow: auto; 
+	width: 95%;
 } 
 
 	#qnp-playlist-container .playlist-videos-list.collapsed { 
