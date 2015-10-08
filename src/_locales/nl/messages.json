@@ -4,5 +4,23 @@
 	}, 
 	"installNotification": {
 		"message": "Er is een update geinstalleerd. Klik hier om de wijzigingen te bekijken."
+	},
+	"authorAttribution": {
+		"message": "Door jou"
+	},
+	"btnHidePlaylist": {
+		"message": "Sluit playlist"
+	},
+	"btnMinimizePlaylist": {
+		"message": "Minimaliseer playlist"
+	},
+	"btnEmptyPlaylist": {
+		"message": "Maak playlist leeg"
+	},
+	"msgEmptyList": {
+		"message": "Wat een leegte.."
+	},
+	"btnAddToPlaylist": {
+		"message": "Voeg toe aan playlist"
 	}
 }

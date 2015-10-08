@@ -1,0 +1,182 @@
+/*
+ * Queue 'n Play is an application developed by Circularify
+ */
+
+/* Buttons */
+
+.qnp-button { 
+	display: block; 
+	margin-top: -23px; 
+	margin-left: 2px; 
+	position: absolute; 
+	background: no-repeat url('http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp') -462px -343px; 
+	background-color: #f0f0f0; 
+	background-size: auto; 
+	width: 20px; 
+	height: 21px; 
+}
+
+.qnp-button:hover { 
+	display: block; 
+	margin-top: -23px; 
+	margin-left: 2px; 
+	position: absolute; 
+	background: no-repeat url('http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp') -462px -343px; 
+	background-color: #f0f0f0; 
+	background-size: auto; 
+	width: 20px; 
+	height: 21px; 
+} 
+
+.qnp-btn-playlist-close { 
+	background: no-repeat url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp) -364px -209px; 
+	background-size: auto; 
+	width: 9px; 
+	height: 9px;
+} 
+
+.qnp-btn-playlist-collapse-in { 
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAANZJREFUOI3NkMttAkEQRKt3uTqPrigMlgPYyYIzEgcfMGA7HqsTsAyIFEAdBhEwvsxKA5pZeU9236pV9foD/HW1pWbXdXOSO1Vt3P0wGkDyC8CDiDyRFHffjQKoKkTkOckpyaYGKQLc/UjyCmCWWo+q2rr7968ACXJQ1SgiMwAQkSKkCkiQfTpn2kNIntz93HuaIUAKSa5jjNdcDwJCCBsA6yy8MbPPmwEjwmsze7v3FX8QQlgB2GatVzN7L3knlQWW2eSVmX3UNq39YAHgEmN8GQr/j/oBz1JSq+CjfRgAAAAASUVORK5CYII=); 
+	width: 16px; 
+	height: 16px; 
+}
+
+.qnp-btn-playlist-collapse-out { 
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAMJJREFUOI3tkDEKwkAQRf8MqcQiF5AgVgriRcJOEsgJbG2sRZt4n6SxTmcpVlpaeI3A2mwku2YDloK/mh3mPWYW+MdKkiRzEQkHRihN01We5+O2wW0hImsiujHzJcuyyAMXAK5N05zjOB5ZAiJSppxqrWtH0sI7814GQRBZAmbeAnj2SFwYWut9VVV3ACDnD2ZEVAOYmNYDwAnApjN2KMuyeK/mHtoj6caCewUDkg/YK3Al5uajb9YbEQmVUouvwd/KC/3vQI0GizEnAAAAAElFTkSuQmCC');
+	width: 16px; 
+	height: 16px; 
+}
+
+/* Playlist */
+
+#qnp-playlist-container { 
+	width: 480px; 
+	height: 200px; 
+	position: fixed; 
+	bottom: 324px; 
+	right: 10px; 
+	z-index: 9999; 
+} 
+
+	#qnp-playlist-container.collapsed { 
+		height: 61px; bottom: 280px; 
+	}
+	
+#qnp-playlist-container .playlist-videos-list { 
+	background-color: #222; 
+	height: 183px; 
+	overflow: auto; 
+} 
+
+	#qnp-playlist-container .playlist-videos-list.collapsed { 
+		display:none; 	
+	} 
+
+#qnp-playlist-container .app-bar-playlist-controls { 
+	float: right; 
+	line-height: 33px;
+} 
+
+	#qnp-playlist-container .app-bar-playlist-controls-collapse { 
+		float: left; 
+		width: 25px; 
+		line-height: 38px; 
+		margin-left: -5px; 
+	};
+
+#qnp-playlist-container .yt-uix-button-player-controls { 
+	padding: 0; 
+	margin-left: 0; 
+} 
+ 
+#qnp-playlist-container .playlist-header { 
+	padding: 0 10px; 
+} 
+
+	#qnp-playlist-container .playlist-header-content { 
+		font-size: 11px; 
+		height: 37px; 
+		line-height: 1.5; 
+		padding: 15px 5px 8px; 
+	} 
+	
+	#qnp-playlist-container .playlist-info {
+		overflow: hidden; 
+		white-space: nowrap; 
+		text-overflow: ellipsis; 
+	}  
+		
+		#qnp-playlist-container .playlist-title { 
+			color: #fff; 
+			display: inline; 
+			font-size: 15px; 
+			font-weight: normal; 
+		} 
+		
+			#qnp-playlist-container .playlist-title a { 
+				color: inherit; 
+			} 
+		
+			#qnp-playlist-container .author-attribution { 
+				font-size: 11px; 
+			} 
+			
+			#qnp-playlist-container .control-bar { 
+				border-top: 1px solid #3a3a3a; 
+			}
+			
+	#qnp-playlist-container .playlist-videos-list>li { 
+		overflow: hidden; 
+		padding: 10px 10px 10px 0 
+	} 
+	
+		#qnp-playlist-container .playlist-videos-list>li .index { 
+			font-size: 10px; 
+			line-height: 41px; 
+			float: left; 
+			margin: 0 2px; 
+			text-align: center; 
+			width: 24px; 
+		} 
+		
+			#qnp-playlist-container .playlist-video { 
+				display: block; 
+				height: 41px; 
+				position: relative; 
+			} 
+			
+				#qnp-playlist-container .playlist-video:hover { 
+					text-decoration: none; 
+				} 
+				
+				#qnp-playlist-container .playlist-video .video-thumb { 
+					float: left; 
+					margin-left: 0; 
+					margin-right: 8px; 
+				} 
+				
+				#qnp-playlist-container .playlist-video a:hover,#qnp-playlist-container .playlist-video a:focus { 
+					cursor: pointer;
+				}
+									
+				#qnp-playlist-container .playlist-video-description { 
+					overflow: hidden; 
+					position: relative; 
+					top: -2px; 
+				} 
+				
+					#qnp-playlist-container .playlist-video h4 { 
+						color: #cacaca; 
+						font-size: 13px; 
+						font-weight: normal; 
+					} 
+					
+					#qnp-playlist-container .playlist-videos-list .yt-ui-ellipsis { 
+						background-color: #222; 
+					} 
+					
+						#qnp-playlist-container .video-uploader-byline { 
+							color: #767676; 
+							font-size: 11px; 
+						} 
+						

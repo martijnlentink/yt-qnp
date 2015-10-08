@@ -43,11 +43,6 @@ function ytqnp() {
 				var videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink.yt-uix-tile-link')[0].text
 				var videoAut = videoItems[b].parentElement.querySelectorAll('.g-hovercard')[0].innerHTML
 				
-				// Replace colons by their html char
-				videoTitle = videoTitle.replace("'", '%27');
-				videoTitle = videoTitle.replace('(', '%28');
-				videoTitle = videoTitle.replace(')', '%29');
-				
 				// Create the button and add the required attributes
 				var button = document.createElement('button');
 				button.className = "yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-tooltip qnp-button qnp-btn-" + videoId;
@@ -86,21 +81,17 @@ function ytqnp() {
 	{	
 		// It should only show when SnP is cornerized
 		if(window.YTSNPIsCorner)
-		{
-			console.info('playlist ui');
-			
+		{			
 			var playlistq = document.querySelectorAll('#qnp-playlist-container');
 			
 			// Only add the playlist when it's not yet on the page
 			if(playlistq.length == 0)
 			{
-				// YouTube element
-				//var yt = document.querySelectorAll('#player-playlist')[0];
 				
 				// Playlist container
 				var plst = document.createElement('div');
 				plst.id = "qnp-playlist-container";
-				plst.className = "watch-playlist";
+				plst.className = "watch-playlist collapsed";
 			
 				// Main Content
 				var cnt = document.createElement('div');
@@ -114,19 +105,38 @@ function ytqnp() {
 					hcnt.className = "playlist-header-content";
 					hcnt.setAttribute('data-list-title', "Queue 'n Playlist");
 					
-					var btnArea = document.createElement('div');
-					btnArea.className = "app-bar-playlist-controls";
+					var btnAreaOne = document.createElement('div');
+					btnAreaOne.className = "app-bar-playlist-controls-collapse";
+					
+						var mBtn = document.createElement('a');
+						mBtn.className = "yt-uix-button-player-controls";
+						mBtn.setAttribute('title', 'Collapse');
+						mBtn.setAttribute('data-tooltip-text', 'Collapse');
+						mBtn.setAttribute('data-collapse', 'true');
+						mBtn.setAttribute('onclick', 'circularify.ytqnp.collapse()');
+						
+							var smWrap = document.createElement('span');
+							smWrap.className = "yt-uix-button-icon-wrapper";
+							
+							var smIcon = document.createElement('span');
+							smIcon.id = "qnp-collapser";
+							smIcon.className = "yt-uix-button-icon qnp-btn-playlist-collapse-in yt-sprite";
+					
+					
+					var btnAreaTwo = document.createElement('div');
+					btnAreaTwo.className = "app-bar-playlist-controls";
 					
 						var aBtn = document.createElement('a');
 						aBtn.className = "yt-uix-button-player-controls";
-						aBtn.setAttribute('title', 'Empty playlist');
-						aBtn.setAttribute('data-tooltip-text', 'Empty playlist');
+						aBtn.setAttribute('title', 'Close playlist');
+						aBtn.setAttribute('data-tooltip-text', 'Close playlist');
+						aBtn.setAttribute('onclick', 'circularify.ytqnp.close()');
 						
 							var sWrap = document.createElement('span');
 							sWrap.className = "yt-uix-button-icon-wrapper";
 							
 							var sIcon = document.createElement('span');
-							sIcon.className = "yt-uix-button-icon qnp-btn-playlist-delete yt-sprite";
+							sIcon.className = "yt-uix-button-icon qnp-btn-playlist-close yt-sprite";
 						
 					
 					// Info element
@@ -160,7 +170,7 @@ function ytqnp() {
 				// Create the playlist
 				var ol = document.createElement('ol');
 				ol.id = "qnp-playlist";
-				ol.className = "playlist-videos-list yt-uix-scroller";
+				ol.className = "playlist-videos-list yt-uix-scroller collapsed";
 				ol.setAttribute('data-scroller-offset', '0');
 				ol.setAttribute('data-scroller-mousewheellistener', '');
 				ol.setAttribute('data-scroller-scroll-listener', '');
@@ -172,8 +182,12 @@ function ytqnp() {
 				info.appendChild(h3);				
 				sWrap.appendChild(sIcon);
 				aBtn.appendChild(sWrap);
-				btnArea.appendChild(aBtn);
-				hcnt.appendChild(btnArea);
+				btnAreaTwo.appendChild(aBtn);
+				hcnt.appendChild(btnAreaTwo);
+				smWrap.appendChild(smIcon);
+				mBtn.appendChild(smWrap);
+				btnAreaOne.appendChild(mBtn);
+				hcnt.appendChild(btnAreaOne);
 				hcnt.appendChild(info);
 				divH.appendChild(hcnt);
 				divH.appendChild(hcfx);
@@ -208,7 +222,7 @@ function ytqnp() {
 			else if(playlistq.length == 1)
 			{
 				// Show the playlist
-				playlistq[0].style.display = "block;"
+				playlistq[0].style.display = "block";
 			}
 		}
 	}
@@ -227,6 +241,43 @@ function ytqnp() {
 		}
 	}
 	
+	// Collapse playlist
+	function _collapsePlaylist()
+	{
+		var collapse = document.querySelector('a[data-collapse]');
+		var isCollapsed = collapse.getAttribute('data-collapse');
+		var newCollapseState = "";
+		
+		// If the player is collapsed, open it
+		if(isCollapsed == "true")
+		{	
+			// open the list
+			var pc = document.querySelectorAll('#qnp-playlist-container')[0];
+			pc.className = "watch-playlist"; 
+			var pl = document.querySelectorAll("#qnp-playlist")[0];
+			pl.className = "playlist-videos-list yt-uix-scroller";
+			
+			// Set the icon
+			document.querySelector('#qnp-collapser').className = "yt-uix-button-icon qnp-btn-playlist-collapse-out yt-sprite";
+			newCollapseState = "false";
+		}
+		else
+		{
+			// Close it
+			var pc = document.querySelectorAll('#qnp-playlist-container')[0];
+			pc.className = "watch-playlist collapsed"; 
+			var pl = document.querySelectorAll("#qnp-playlist")[0];
+			pl.className = "playlist-videos-list yt-uix-scroller collapsed";
+			
+			// Set the icon
+			document.querySelector('#qnp-collapser').className = "yt-uix-button-icon qnp-btn-playlist-collapse-in yt-sprite";		
+			newCollapseState = "true";
+		}
+		
+		// Set the state
+		collapse.setAttribute('data-collapse', newCollapseState);
+	}
+	
 	// Update the visual playlist
 	function _updatePlaylist()
 	{		
@@ -237,68 +288,89 @@ function ytqnp() {
 			qnpNode.removeChild(qnpNode.firstChild);
 		}
 		
-		// Loop through the items in the playlist
-		for(var v = 0; v < _playlist.length; v++)
-		{
-			// Reference the current video
-			var current = _playlist[v];
-			
-			var li = document.createElement("li");
-			li.className = "yt-uix-scroller-scroll-unit";
-			li.setAttribute('data-video-title', current.title);
-			li.setAttribute('data-video-id', current.id);
-			li.setAttribute('data-index', v);
-			
-			var eIndex = document.createElement('span');
-			eIndex.className = "index";
-			eIndex.innerHTML = v + 1;
-			
-			var eLink = document.createElement('a');
-			eLink.className = "yt-uix-sessionlink spf-link playlist-video clearfix spf-link";
-			
-			var eThumb = document.createElement('span');
-			eThumb.className = "video-thumb yt-thumb yt-thumb-72";
-			var eThumbDef = document.createElement('span');
-			eThumbDef.className = "yt-thumb-default";
-			var eThumbClip = document.createElement('span');
-			eThumbClip.className = "yt-thumb-clip";
-			var img = document.createElement('img');
-			img.setAttribute('src', 'https://i.ytimg.com/vi/' + current.id + '/default.jpg');
-			img.setAttribute('width', '72');
-			var spacer = document.createElement('span');
-			spacer.className = 'vertical-align';
-			
-			// Wrap up the link tag
-			eThumbClip.appendChild(img);
-			eThumbClip.appendChild(spacer);
-			eThumbDef.appendChild(eThumbClip);
-			eThumb.appendChild(eThumbDef);
-			eLink.appendChild(eThumb);
-			
-			var eDesc = document.createElement('div');
-			eDesc.className = "playlist-video-description";
-			
-			var title = document.createElement('h4');
-			title.className = "yt-ui-ellipsis yt-ui-ellipsis-2";
-			title.innerHTML = current.title;			
-			var uploader = document.createElement('span');
-			uploader.className = "video-uploader-byline";
-			var uplsub = document.createElement('span');
-			uplsub.innerHTML = "by <strong>" + current.by + "</strong>";
-			
-			// Wrap up Description
-			eDesc.appendChild(title);
-			uploader.appendChild(uplsub);
-			eDesc.appendChild(uploader);
-			eLink.appendChild(eDesc);
-			
-			// Add all the elements
-			li.appendChild(eIndex);
-			li.appendChild(eLink);
-			
-			// Add the item to the playlist
+		// If the playlist is empty, tell the user so.
+		if(_playlist.length == 0)
+		{	
+			var li = document.createElement('li');
+			var span = document.createElement('span');
+			span.style.padding = "0 10px";
+			span.innerHTML = "All dem empty spaces..";
+			li.appendChild(span);
 			qnpNode.appendChild(li);
+		} 
+		else
+		{		
+		
+			// Remove the minimize state
+			var pc = document.querySelectorAll('#qnp-playlist-container')[0];
+			pc.className = "watch-playlist"; 
+			var pl = document.querySelectorAll("#qnp-playlist")[0];
+			pl.className = "playlist-videos-list yt-uix-scroller";
+			document.querySelector('a[data-collapse]').setAttribute('data-collapse', 'false');
+			document.querySelector('#qnp-collapser').className = 'yt-uix-button-icon qnp-btn-playlist-collapse-out yt-sprite';
 			
+			// Loop through the items in the playlist
+			for(var v = 0; v < _playlist.length; v++)
+			{
+				// Reference the current video
+				var current = _playlist[v];
+				
+				var li = document.createElement("li");
+				li.className = "yt-uix-scroller-scroll-unit";
+				li.setAttribute('data-video-title', current.title);
+				li.setAttribute('data-video-id', current.id);
+				li.setAttribute('data-index', v);
+				
+				var eIndex = document.createElement('span');
+				eIndex.className = "index";
+				eIndex.innerHTML = v + 1;
+				
+				var eLink = document.createElement('a');
+				eLink.className = "yt-uix-sessionlink spf-link playlist-video clearfix spf-link";
+				
+				var eThumb = document.createElement('span');
+				eThumb.className = "video-thumb yt-thumb yt-thumb-72";
+				var eThumbDef = document.createElement('span');
+				eThumbDef.className = "yt-thumb-default";
+				var eThumbClip = document.createElement('span');
+				eThumbClip.className = "yt-thumb-clip";
+				var img = document.createElement('img');
+				img.setAttribute('src', 'https://i.ytimg.com/vi/' + current.id + '/default.jpg');
+				img.setAttribute('width', '72');
+				var spacer = document.createElement('span');
+				spacer.className = 'vertical-align';
+				
+				// Wrap up the link tag
+				eThumbClip.appendChild(img);
+				eThumbClip.appendChild(spacer);
+				eThumbDef.appendChild(eThumbClip);
+				eThumb.appendChild(eThumbDef);
+				eLink.appendChild(eThumb);
+				
+				var eDesc = document.createElement('div');
+				eDesc.className = "playlist-video-description";
+				
+				var title = document.createElement('h4');
+				title.className = "yt-ui-ellipsis yt-ui-ellipsis-2";
+				title.innerHTML = current.title;			
+				var uploader = document.createElement('span');
+				uploader.className = "video-uploader-byline";
+				var uplsub = document.createElement('span');
+				uplsub.innerHTML = "by <strong>" + current.by + "</strong>";
+				
+				// Wrap up Description
+				eDesc.appendChild(title);
+				uploader.appendChild(uplsub);
+				eDesc.appendChild(uploader);
+				eLink.appendChild(eDesc);
+				
+				// Add all the elements
+				li.appendChild(eIndex);
+				li.appendChild(eLink);
+				
+				// Add the item to the playlist
+				qnpNode.appendChild(li);
+			}
 		}
 	}
 	
@@ -320,7 +392,6 @@ function ytqnp() {
 				&& video.title !== undefined && video.title.length > 0
 				&& video.by !== undefined && video.by.length > 0)
 			{
-				console.info(video);
 				_playlist.push(video);
 				_updatePlaylist();
 			}
@@ -376,7 +447,9 @@ function ytqnp() {
 		queue: _queueVideo,
 		dequeue: _dequeueVideo,
 		next: _playNext,
-		navigating: _navigating
+		navigating: _navigating,
+		collapse: _collapsePlaylist,
+		close: _hidePlaylistUI
 	}
 };
 

@@ -37,7 +37,8 @@
 	
 	"web_accessible_resources": [
 		"js/core/modules.js",
-		"js/core/ytqnp.js"
+		"js/core/ytqnp.js",
+		"css/ytqnp.css"
 	],
 	
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
