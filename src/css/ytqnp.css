@@ -72,8 +72,7 @@
 #qnp-playlist-container .playlist-videos-list { 
 	background-color: #222; 
 	height: 183px; 
-	overflow: auto; 
-	width: 95%;
+	overflow: auto;
 } 
 
 	#qnp-playlist-container .playlist-videos-list.collapsed { 
@@ -151,6 +150,7 @@
 				display: block; 
 				height: 41px; 
 				position: relative; 
+				width: 95%;
 			} 
 			
 				#qnp-playlist-container .playlist-video:hover { 
