@@ -37,7 +37,7 @@
 
 .qnp-li-remove {
 	float: right;
-	margin: 0 6px;
+	margin-right: 11px;
 	line-height: 15px;
 	z-index: 9999;
 }

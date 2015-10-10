@@ -33,27 +33,36 @@ function ytqnp() {
 		// Loop through the items and add their respective buttons
 		for(var b = 0; b < videoItems.length-1; b++)
 		{
-			// Get the video ID for the current item in the results
-			var vIdBtn = videoItems[b].querySelectorAll('.addto-watch-later-button')[0];
-			var videoId = vIdBtn.getAttribute('data-video-ids');
-			
-			// Only add the button if it does not exist yet.
-			if(videoItems[b].querySelectorAll('.qnp-btn-' + videoId).length == 0)
+			// Skip playlist
+			if(videoItems[b].className.indexOf("yt-pl-thumb") == -1)
 			{
-				var videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink.yt-uix-tile-link')[0].text
-				var videoAut = videoItems[b].parentElement.querySelectorAll('.g-hovercard')[0].innerHTML
+		
+				// Get the video ID for the current item in the results
+				var vIdBtn = videoItems[b].querySelectorAll('.addto-watch-later-button')[0];
+				var videoId = vIdBtn.getAttribute('data-video-ids');
 				
-				// Create the button and add the required attributes
-				var button = document.createElement('button');
-				button.className = "yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-tooltip qnp-button qnp-btn-" + videoId;
-				button.setAttribute('type', 'button');
-				button.setAttribute('role', 'button');
-				button.setAttribute('title', 'Add to queue');
-				button.setAttribute('data-video-ids', videoId); // This is the video to play
-				button.setAttribute('data-tooltip-text', 'Add to queue');
-				button.setAttribute('onclick', "circularify.ytqnp.queue('" + videoId + ",qnp," + videoTitle + ",qnp," + videoAut + "')");
-				// Add the button
-				videoItems[b].appendChild(button);
+				// Only add the button if it does not exist yet.
+				if(videoItems[b].querySelectorAll('.qnp-btn-' + videoId).length == 0)
+				{
+					var videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink.yt-uix-tile-link')[0].innerHTML;
+					videoTitle = videoTitle.replace("'", "&apos;");
+					videoTitle = videoTitle.replace('"', "&quot;");
+					var videoAut = videoItems[b].parentElement.querySelectorAll('.g-hovercard')[0].innerHTML
+					videoAut = videoAut.replace("'", "&apos;");
+					videoAut = videoAut.replace('"', "&quot;");
+					
+					// Create the button and add the required attributes
+					var button = document.createElement('button');
+					button.className = "yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-tooltip qnp-button qnp-btn-" + videoId;
+					button.setAttribute('type', 'button');
+					button.setAttribute('role', 'button');
+					button.setAttribute('title', 'Add to queue');
+					button.setAttribute('data-video-ids', videoId); // This is the video to play
+					button.setAttribute('data-tooltip-text', 'Add to queue');
+					button.setAttribute('onclick', "circularify.ytqnp.queue('" + videoId + ",qnp," + videoTitle + ",qnp," + videoAut + "')");
+					// Add the button
+					videoItems[b].appendChild(button);
+				}
 			}
 		}
 	}
@@ -327,6 +336,8 @@ function ytqnp() {
 				
 				var eClose = document.createElement('a');
 				eClose.className = 'qnp-li-remove';
+				eClose.setAttribute('title' , 'Remove from playlist');
+				eClose.setAttribute('data-tooltip-text' , 'Remove from playlist');
 				eClose.setAttribute('onclick', 'circularify.ytqnp.remove(' + v + ')');
 				
 					var eCIcon = document.createElement('span');
