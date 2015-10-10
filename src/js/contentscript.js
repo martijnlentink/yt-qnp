@@ -31,9 +31,17 @@ inject(function () {
 	// Subscribe QNP
 	setTimeout(function() {
 		if(circularify !== undefined)
-		{
-			_subscribe();
-			circularify.mailoffice.subscribe(_qnpNavigating);
+		{			
+			// We want the extension to work only when Seek 'n Play is installed
+			if(circularify.exts &&
+				circularify.exts.installed &&
+				circularify.exts.installed[0].id == "9310") {
+	
+				// So if Seek 'n Play is installed, subscribe to the events
+				_subscribe();
+				circularify.mailoffice.subscribe(_qnpNavigating);				
+			}
+			
 			clearTimeout(this);
 		}
 	}, 1000);	
