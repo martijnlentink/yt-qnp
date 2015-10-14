@@ -33,8 +33,8 @@ function ytqnp() {
 		// Loop through the items and add their respective buttons
 		for(var b = 0; b < videoItems.length-1; b++)
 		{
-			// Skip playlist
-			if(videoItems[b].className.indexOf("yt-pl-thumb") == -1)
+			// Skip playlist and channel
+			if(videoItems[b].className.indexOf("yt-pl-thumb") == -1 && videoItems[b].parentElement.className.indexOf("yt-lockup-channel") == -1)
 			{
 		
 				// Get the video ID for the current item in the results
