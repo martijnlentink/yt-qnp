@@ -183,6 +183,8 @@ function ytqnp() {
 				ol.setAttribute('data-scroller-offset', '0');
 				ol.setAttribute('data-scroller-mousewheellistener', '');
 				ol.setAttribute('data-scroller-scroll-listener', '');
+				ol.setAttribute('ondrop', 'qnpDrop(event)');
+				ol.setAttribute('ondragover', 'qnpAllow(event)');
 
 				// Wrap up the info header
 				h3.appendChild(h3a);
@@ -329,6 +331,8 @@ function ytqnp() {
 				li.setAttribute('data-video-title', current.title);
 				li.setAttribute('data-video-id', current.id);
 				li.setAttribute('data-index', v);
+				li.setAttribute('draggable', 'true');
+				li.setAttribute('onstartdrag', 'qnpDrag(event)');
 				
 				var eIndex = document.createElement('span');
 				eIndex.className = "index";
@@ -417,6 +421,16 @@ function ytqnp() {
 				_playlist.push(video);
 				_updatePlaylist();
 			}
+			
+			// GA
+			if(window.yttqrcooldown == 0) {
+				yttqr('send', 'event', 'Queue \'n Play', 'queue', 'Queue \'n Play Queue Video');
+				window.yttrcooldown = 1;
+				setTimeout(function() {
+					window.yttqrcooldown = 0;
+				}, 1500);
+			}
+			
 		} else 
 		{
 			console.error('9312.2 - There was an error queueing a video.');
@@ -464,6 +478,15 @@ function ytqnp() {
 						player.playVideo();
 						clearTimeout(this);
 					}, 1000);
+										
+					// GA
+					if(window.yttqrcooldown == 0) {
+						yttqr('send', 'event', 'Queue \'n Play', 'queue', 'Queue \'n Play Play Video');
+						window.yttrcooldown = 1;
+						setTimeout(function() {
+							window.yttqrcooldown = 0;
+						}, 1500);
+					}
 				}
 			}
 		
