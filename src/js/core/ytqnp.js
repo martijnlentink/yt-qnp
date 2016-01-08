@@ -31,7 +31,7 @@ function ytqnp() {
 		var videoItems = document.querySelectorAll('.yt-lockup-thumbnail');
 		
 		// Loop through the items and add their respective buttons
-		for(var b = 0; b < videoItems.length-1; b++)
+		for(var b = 0; b < videoItems.length; b++)
 		{
 			// Skip playlist and channel
 			if(videoItems[b].className.indexOf("yt-pl-thumb") == -1 && videoItems[b].parentElement.className.indexOf("yt-lockup-channel") == -1)
