@@ -16,12 +16,27 @@ function ytqnp() {
 			// Add the buttons
 			_insertQueueButtons();
 			_createPlaylistUI();
+			_hidePlayerButtons(true);
 		} else 
 		{
 			// Remove the buttons
 			_hideQueueButtons();
 			_hidePlaylistUI();
+			_hidePlayerButtons(false);
 		}
+	}
+	
+	// Change behavior of the Play Next button from YouTube
+	function _hidePlayerButtons(hideOn)
+	{
+		// Reference the playNext button
+		var btnNext = document.querySelector('.ytp-next-button.ytp-button');
+			
+		// If it needs to be hidden, do so.
+		if(hideOn)
+			btnNext.setAttribute('style', 'display: none');
+		else
+			btnNext.removeAttribute('style');
 	}
 	
 	// Insert the Queue buttons
@@ -44,10 +59,24 @@ function ytqnp() {
 				// Only add the button if it does not exist yet.
 				if(videoItems[b].querySelectorAll('.qnp-btn-' + videoId).length == 0)
 				{
-					var videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink.yt-uix-tile-link')[0].innerHTML;
+					var videoTitle;
+					var videoAut;
+					
+					// Depending on what page is loaded, we need to get a different element
+					if(window.location.href.indexOf('results?search_query') > -1)
+						videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink.yt-uix-tile-link')[0].innerHTML;
+					else						
+						videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink')[1].innerHTML;
+
 					videoTitle = videoTitle.replace("'", "&apos;");
 					videoTitle = videoTitle.replace('"', "&quot;");
-					var videoAut = videoItems[b].parentElement.querySelectorAll('.g-hovercard')[0].innerHTML
+					
+					// Depending on what page is loaded, we need to get a different element
+					if(window.location.href.indexOf('channel') > -1)
+						videoAut = document.querySelector('.spf-link.branded-page-header-title-link.yt-uix-sessionlink').innerHTML;
+					else
+						videoAut = videoItems[b].parentElement.querySelectorAll('.g-hovercard')[0].innerHTML;
+
 					videoAut = videoAut.replace("'", "&apos;");
 					videoAut = videoAut.replace('"', "&quot;");
 					
@@ -495,7 +524,37 @@ function ytqnp() {
 					}
 				}
 			}
-		
+		}
+	}
+	
+	function _playNextForce()
+	{
+		if(window.YTSNPIsCorner)
+		{		
+			// Only queue a video when there are videos queued
+			if(_playlist.length > 0)
+			{
+				// Reference the player api
+				var player = circularify.ytapi.getPlayer();
+				
+				// Get the first video ID
+				var newId = _dequeueVideo().id;
+				
+				// Queue the video and start playing
+				player.cueVideoById(newId);
+
+				player.playVideo();
+			
+				// GA
+				if(window.yttqrcooldown == 0) {
+					yttqr('send', 'event', 'Queue \'n Play', 'queue', 'Queue \'n Play Play Video');
+					window.yttrcooldown = 1;
+					setTimeout(function() {
+						window.yttqrcooldown = 0;
+						console.info('--playnext sent');
+					}, 1500);
+				}
+			}
 		}
 	}
 	
@@ -518,6 +577,7 @@ function ytqnp() {
 		dequeue: _dequeueVideo,
 		remove: _removeVideo,
 		next: _playNext,
+		nextForce: _playNextForce,
 		reorder: _reorder,
 		navigating: _navigating,
 		collapse: _collapsePlaylist,
