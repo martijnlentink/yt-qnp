@@ -37,6 +37,7 @@
 	
 	"web_accessible_resources": [
 		"js/core/modules.js",
+		"js/core/dd.js",
 		"js/core/ytqnp.js",
 		"css/ytqnp.css"
 	],

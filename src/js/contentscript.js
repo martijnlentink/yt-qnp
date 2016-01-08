@@ -4,11 +4,13 @@
 
 // Reference the required files 
 var modulesJs = chrome.extension.getURL('js/core/modules.js');
+var ddJs = chrome.extension.getURL('js/core/dd.js');
 var ytqnpJs = chrome.extension.getURL('js/core/ytqnp.js');
 var ytqnpCss = chrome.extension.getURL('css/ytqnp.css');
  
 // Inject extension files
 injectLf(modulesJs);
+injectLf(ddJs);
 injectLf(ytqnpJs);
 injectLcf(ytqnpCss);
 
@@ -45,26 +47,8 @@ inject(function () {
 			clearTimeout(this);
 		}
 	}, 1000);
-
 	
-	/// Drag & Drop events
-	
-	function qnpAllow(ev)
-	{
-		ev.preventDefault();
-	}
-	
-	function qnpDrag(ev)
-	{
-		ev.dataTransfer.setData("text", ev.target.id);
-	}
-	
-	function qnpDrop(ev)
-	{
-		ev.preventDefault();
-		var data = ev.dataTransfer.getData("text");
-		ev.target.appendChild(document.getElementById(data));
-	}
+	window.yttqrcooldown = 0;
 });
 
 // Inject linked file

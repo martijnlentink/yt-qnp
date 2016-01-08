@@ -183,8 +183,12 @@ function ytqnp() {
 				ol.setAttribute('data-scroller-offset', '0');
 				ol.setAttribute('data-scroller-mousewheellistener', '');
 				ol.setAttribute('data-scroller-scroll-listener', '');
-				ol.setAttribute('ondrop', 'qnpDrop(event)');
-				ol.setAttribute('ondragover', 'qnpAllow(event)');
+				//ol.setAttribute('ondrop', 'qnpDrop(event)');
+				//ol.setAttribute('ondragover', 'qnpAllow(event)');
+				
+				ol.addEventListener('dragover', qnpAllow);
+				ol.addEventListener('dragenter', qnpAllow);
+				ol.addEventListener('drop', qnpDrop);
 
 				// Wrap up the info header
 				h3.appendChild(h3a);
@@ -305,7 +309,7 @@ function ytqnp() {
 			var li = document.createElement('li');
 			var span = document.createElement('span');
 			span.style.padding = "0 10px";
-			span.innerHTML = "All dem empty spaces..";
+			span.innerHTML = "There is nothing here..";
 			li.appendChild(span);
 			qnpNode.appendChild(li);
 		} 
@@ -332,7 +336,7 @@ function ytqnp() {
 				li.setAttribute('data-video-id', current.id);
 				li.setAttribute('data-index', v);
 				li.setAttribute('draggable', 'true');
-				li.setAttribute('onstartdrag', 'qnpDrag(event)');
+				li.setAttribute('ondragstart', 'qnpDrag(event)');
 				
 				var eIndex = document.createElement('span');
 				eIndex.className = "index";
@@ -428,6 +432,7 @@ function ytqnp() {
 				window.yttrcooldown = 1;
 				setTimeout(function() {
 					window.yttqrcooldown = 0;
+					console.info('-queue sent');
 				}, 1500);
 			}
 			
@@ -485,11 +490,24 @@ function ytqnp() {
 						window.yttrcooldown = 1;
 						setTimeout(function() {
 							window.yttqrcooldown = 0;
+							console.info('--playnext sent');
 						}, 1500);
 					}
 				}
 			}
 		
+		}
+	}
+	
+	// Reorder an item from position to another
+	function _reorder(fro, to)
+	{
+		// Only work when parameters aren't empty, and when
+		// 	from and to aren't the same.
+		if(fro != "" && to != "" && fro !== to)
+		{
+			_playlist.move(fro, to);
+			_updatePlaylist();
 		}
 	}
 	
@@ -500,6 +518,7 @@ function ytqnp() {
 		dequeue: _dequeueVideo,
 		remove: _removeVideo,
 		next: _playNext,
+		reorder: _reorder,
 		navigating: _navigating,
 		collapse: _collapsePlaylist,
 		close: _hidePlaylistUI
