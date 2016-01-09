@@ -54,43 +54,46 @@ function ytqnp() {
 		
 				// Get the video ID for the current item in the results
 				var vIdBtn = videoItems[b].querySelectorAll('.addto-watch-later-button')[0];
-				var videoId = vIdBtn.getAttribute('data-video-ids');
-				
-				// Only add the button if it does not exist yet.
-				if(videoItems[b].querySelectorAll('.qnp-btn-' + videoId).length == 0)
+				if(vIdBtn != undefined)
 				{
-					var videoTitle;
-					var videoAut;
+					var videoId = vIdBtn.getAttribute('data-video-ids');
 					
-					// Depending on what page is loaded, we need to get a different element
-					if(window.location.href.indexOf('results?search_query') > -1)
-						videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink.yt-uix-tile-link')[0].innerHTML;
-					else						
-						videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink')[1].innerHTML;
+					// Only add the button if it does not exist yet.
+					if(videoItems[b].querySelectorAll('.qnp-btn-' + videoId).length == 0)
+					{
+						var videoTitle;
+						var videoAut;
+						
+						// Depending on what page is loaded, we need to get a different element
+						if(window.location.href.indexOf('results?search_query') > -1)
+							videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink.yt-uix-tile-link')[0].innerHTML;
+						else						
+							videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink')[1].innerHTML;
 
-					videoTitle = videoTitle.replace("'", "&apos;");
-					videoTitle = videoTitle.replace('"', "&quot;");
-					
-					// Depending on what page is loaded, we need to get a different element
-					if(window.location.href.indexOf('channel') > -1)
-						videoAut = document.querySelector('.spf-link.branded-page-header-title-link.yt-uix-sessionlink').innerHTML;
-					else
-						videoAut = videoItems[b].parentElement.querySelectorAll('.g-hovercard')[0].innerHTML;
+						videoTitle = videoTitle.replace("'", "&apos;");
+						videoTitle = videoTitle.replace('"', "&quot;");
+						
+						// Depending on what page is loaded, we need to get a different element
+						if(window.location.href.indexOf('channel') > -1)
+							videoAut = document.querySelector('.spf-link.branded-page-header-title-link.yt-uix-sessionlink').innerHTML;
+						else
+							videoAut = videoItems[b].parentElement.querySelectorAll('.g-hovercard')[0].innerHTML;
 
-					videoAut = videoAut.replace("'", "&apos;");
-					videoAut = videoAut.replace('"', "&quot;");
-					
-					// Create the button and add the required attributes
-					var button = document.createElement('button');
-					button.className = "yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-tooltip qnp-button qnp-btn-" + videoId;
-					button.setAttribute('type', 'button');
-					button.setAttribute('role', 'button');
-					button.setAttribute('title', 'Add to queue');
-					button.setAttribute('data-video-ids', videoId); // This is the video to play
-					button.setAttribute('data-tooltip-text', 'Add to queue');
-					button.setAttribute('onclick', "circularify.ytqnp.queue('" + videoId + ",qnp," + videoTitle + ",qnp," + videoAut + "')");
-					// Add the button
-					videoItems[b].appendChild(button);
+						videoAut = videoAut.replace("'", "&apos;");
+						videoAut = videoAut.replace('"', "&quot;");
+						
+						// Create the button and add the required attributes
+						var button = document.createElement('button');
+						button.className = "yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-tooltip qnp-button qnp-btn-" + videoId;
+						button.setAttribute('type', 'button');
+						button.setAttribute('role', 'button');
+						button.setAttribute('title', 'Add to queue');
+						button.setAttribute('data-video-ids', videoId); // This is the video to play
+						button.setAttribute('data-tooltip-text', 'Add to queue');
+						button.setAttribute('onclick', "circularify.ytqnp.queue('" + videoId + ",qnp," + videoTitle + ",qnp," + videoAut + "')");
+						// Add the button
+						videoItems[b].appendChild(button);
+					}
 				}
 			}
 		}

@@ -52,9 +52,6 @@ function qnpDrop(ev)
 	else 
 		targetPos = target.getAttribute("data-index"); // Get the target position in the list
 		
-	//console.log(ev);
-	console.log(data, targetPos);
-
 	// It only must work when the position actually needs to be changed
 	if(data != targetPos)
 	{
