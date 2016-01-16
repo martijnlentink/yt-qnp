@@ -1,4 +1,4 @@
-/*
+/**
  * Queue 'n Play is an application developed by Circularify
  */
 
@@ -16,14 +16,17 @@ chrome.runtime.onInstalled.addListener(function(details){
 
 	// i18n install message
 	var lnInstallMsg = chrome.i18n.getMessage("installNotification");
-	
+	var title = 'Queue \'n Play';
+
 	// SHOW INSTALL POPUP
 	chrome.notifications.create("9312", {
 		type: 'basic',
 		iconUrl: chrome.extension.getURL('img/icon.128.png'),
-		title: 'Queue \'n Play',
+		title: title,
 		message: lnInstallMsg
 	}, null);
+
+	circularify.omni.analytics.registerEvent(details.reason, chrome.runtime.getManifest().version, title);
 });
 
 // Add Event Listener for Notifications
