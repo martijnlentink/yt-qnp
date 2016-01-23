@@ -36,7 +36,7 @@ chrome.notifications.onClicked.addListener(function(notificationId) {
 	if(notificationId == "9312") {
 	
 		// Get version number and replace '.' with '-'
-		var vnr = chrome.app.getDetails().version.replace('.', '-');
+		var vnr = chrome.app.getDetails().version.replace(/\./g, '-');
 	
 		// Navigate to our website
 		chrome.tabs.create({'url': 'http://circularify.com/release/qnp/' + vnr });
