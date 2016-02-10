@@ -1,95 +1,44 @@
-/*
+/**
  * Queue 'n Play is an application developed by Circularify
  */
 
 // Reference the required files 
-var modulesJs = chrome.extension.getURL('js/core/modules.js');
-var ddJs = chrome.extension.getURL('js/dd.js');
-var ytqnpJs = chrome.extension.getURL('js/ytqnp.js');
-var ytqnpCss = chrome.extension.getURL('css/ytqnp.css');
- 
-// Inject extension files
-injectLf(modulesJs);
-injectLf(ddJs);
-injectLf(ytqnpJs);
-injectLcf(ytqnpCss);
+circularify.omni.analytics.initialize('UA-50232941-4');
+circularify.omni.page.injectScript('js/dd.js');
+circularify.omni.page.injectScript('js/ytqnp.js');
+circularify.omni.page.injectCss('css/ytqnp.css');
 
 // Main method.
-inject(function () {
-		
+circularify.omni.page.injectScript(function () {
+	
+	window.addEventListener("extRegistered", _extensionRegisteredEventHandler);
+
 	// Navigating function
 	function _qnpNavigating()
 	{
 		circularify.ytqnp.navigating();
-	}	
-	
-	// Subscribe to the onStateChange event on the player object
-	function _subscribe()
-	{
+	}
+
+	function _registerPlayerEvents() {
+		// So if Seek 'n Play is installed, subscribe to the events
 		var player = circularify.ytapi.getPlayer();
+		// Subscribe to the onStateChange event on the player object
 		player.addEventListener("onStateChange", circularify.ytqnp.next);
 	}
 	
 	// Subscribe QNP
-	setTimeout(function() {
-		if(circularify !== undefined)
-		{			
-			// We want the extension to work only when Seek 'n Play is installed
-			if(circularify.exts &&
-				circularify.exts.installed &&
-				circularify.exts.installed[0].id == "9310") {
-	
-				// So if Seek 'n Play is installed, subscribe to the events
-				_subscribe();
-				circularify.mailoffice.subscribe(_qnpNavigating);				
-			}
+	function _extensionRegisteredEventHandler(ev) {
+		// We want the extension to work only when Seek 'n Play is installed
+		if(ev.detail.id == "snp") {
+			if (circularify.ytapi.isPlayerReady)
+				_registerPlayerEvents();
+			else
+				window.addEventListener("ytPlayerReady", _registerPlayerEvents);
 			
-			clearTimeout(this);
+			circularify.mailoffice.subscribe(_qnpNavigating);				
 		}
-	}, 1000);
-	
+	}
+
 	window.yttqrcooldown = 0;
 });
 
-// Inject linked file
-function injectLf(fn) {
-	var script = document.createElement('script');
-	script.src = fn;
-	document.body.appendChild(script);
-}
-
-// Inject linked css file
-function injectLcf(fn) {
-	var link = document.createElement('link');
-	link.rel = "stylesheet";
-	link.type = "text/css";
-	link.href = fn;
-	document.body.appendChild(link);
-}
-
-// Inject function
-function inject(fn) {
-	var script = document.createElement('script');
-	script.innerHTML = '(' + fn.toString() + ')();';
-	document.body.appendChild(script);
-}
-
-// Inject some CSS
-function injectCss(css) {
-	var element = document.createElement('style');
-	element.innerHTML = css.toString();
-	document.head.appendChild(element);
-}
-
-// Inject GA
-inject(function(){
-	
-	setTimeout(function() {
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','https://www.google-analytics.com/analytics.js','yttqr');
-
-		yttqr('create', 'UA-50232941-4', 'auto');
-	}, 1000);
-})
