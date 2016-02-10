@@ -2,15 +2,6 @@
  * Queue 'n Play is an application developed by Circularify
  */
 
- // WebRequest Listener
-chrome.webRequest.onBeforeRequest.addListener(
-	function(details) {
-
-	}, 
-	{ urls: ["*://*.ytimg.com/*"]},
-	["blocking"]
-);
-
 // Install listener
 chrome.runtime.onInstalled.addListener(function(details){
 
@@ -26,7 +17,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 		message: lnInstallMsg
 	}, null);
 
-	circularify.omni.analytics.registerEvent(details.reason, chrome.runtime.getManifest().version, title);
+	circularify.omni.analytics.registerEvent(details.reason, chrome.runtime.getManifest().version);
 });
 
 // Add Event Listener for Notifications

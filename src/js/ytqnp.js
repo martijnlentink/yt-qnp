@@ -595,4 +595,4 @@ var circularify = circularify || {};
 circularify.ytqnp = circularify.ytqnp || ytqnp();
 
 // Add QNP to the Circularify list of installed extension
-circularify.exts.installed.push( { "id": "9312", "app": "Queue 'n Play" } );
+circularify.omni.extensions.register("qnp");
