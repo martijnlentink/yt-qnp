@@ -14,9 +14,9 @@ circularify.omni.page.injectScript(function () {
 	window.addEventListener("extRegistered", _extensionRegisteredEventHandler);
 
 	// Navigating function
-	function _qnpNavigating()
+	function _qnpNavigating(ev)
 	{
-		circularify.ytqnp.navigating();
+		circularify.ytqnp.navigating(ev.detail.url);
 	}
 
 	function _registerPlayerEvents() {
@@ -34,8 +34,9 @@ circularify.omni.page.injectScript(function () {
 				_registerPlayerEvents();
 			else
 				window.addEventListener("ytPlayerReady", _registerPlayerEvents);
-			
-			circularify.mailoffice.subscribe(_qnpNavigating);				
+		}
+		if(ev.detail.id == "qnp") {
+			window.addEventListener("spfdone", _qnpNavigating);
 		}
 	}
 

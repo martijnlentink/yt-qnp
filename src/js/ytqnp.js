@@ -9,18 +9,20 @@ function ytqnp() {
 	var _playlist  = [];
 		
 	// Navigating function for QNP
-	function _navigating() 
+	function _navigating(url) 
 	{
-		if(window.YTSNPIsCorner)
+		url = url || document.location.href;
+		if(circularify.ytsnp.shouldCornerize(url))
 		{
 			// Add the buttons
 			_insertQueueButtons();
 			_createPlaylistUI();
 			_hidePlayerButtons(true);
-		} else 
+		}
+		else 
 		{
 			// Remove the buttons
-			_hideQueueButtons();
+			// _hideQueueButtons();
 			_hidePlaylistUI();
 			_hidePlayerButtons(false);
 		}
@@ -31,12 +33,14 @@ function ytqnp() {
 	{
 		// Reference the playNext button
 		var btnNext = document.querySelector('.ytp-next-button.ytp-button');
-			
-		// If it needs to be hidden, do so.
-		if(hideOn)
-			btnNext.setAttribute('style', 'display: none');
-		else
-			btnNext.removeAttribute('style');
+		
+		if (btnNext) {
+			// If it needs to be hidden, do so.
+			if(hideOn)
+				btnNext.setAttribute('style', 'display: none');
+			else
+				btnNext.removeAttribute('style');
+		}
 	}
 	
 	// Insert the Queue buttons
@@ -53,7 +57,7 @@ function ytqnp() {
 			{
 		
 				// Get the video ID for the current item in the results
-				var vIdBtn = videoItems[b].querySelectorAll('.addto-watch-later-button')[0];
+				var vIdBtn = videoItems[b].querySelector('button[class*="addto-watch-later-button"]');
 				if(vIdBtn != undefined)
 				{
 					var videoId = vIdBtn.getAttribute('data-video-ids');
@@ -66,21 +70,19 @@ function ytqnp() {
 						
 						// Depending on what page is loaded, we need to get a different element
 						if(window.location.href.indexOf('results?search_query') > -1)
-							videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink.yt-uix-tile-link')[0].innerHTML;
+							videoTitle = videoItems[b].parentElement.querySelector('.yt-uix-sessionlink.yt-uix-tile-link').innerHTML;
 						else						
 							videoTitle = videoItems[b].parentElement.querySelectorAll('.yt-uix-sessionlink')[1].innerHTML;
-
-						videoTitle = videoTitle.replace("'", "&apos;");
-						videoTitle = videoTitle.replace('"', "&quot;");
+						
+						videoTitle = circularify.utils.htmlEscape(videoTitle);
 						
 						// Depending on what page is loaded, we need to get a different element
 						if(window.location.href.indexOf('channel') > -1)
 							videoAut = document.querySelector('.spf-link.branded-page-header-title-link.yt-uix-sessionlink').innerHTML;
 						else
-							videoAut = videoItems[b].parentElement.querySelectorAll('.g-hovercard')[0].innerHTML;
-
-						videoAut = videoAut.replace("'", "&apos;");
-						videoAut = videoAut.replace('"', "&quot;");
+							videoAut = videoItems[b].parentElement.querySelector('.g-hovercard').innerHTML;
+						
+						videoAut = circularify.utils.htmlEscape(videoAut);
 						
 						// Create the button and add the required attributes
 						var button = document.createElement('button');
@@ -90,7 +92,7 @@ function ytqnp() {
 						button.setAttribute('title', 'Add to queue');
 						button.setAttribute('data-video-ids', videoId); // This is the video to play
 						button.setAttribute('data-tooltip-text', 'Add to queue');
-						button.setAttribute('onclick', "circularify.ytqnp.queue('" + videoId + ",qnp," + videoTitle + ",qnp," + videoAut + "')");
+						button.setAttribute('onclick', "circularify.ytqnp.queue('" + videoId + "','" + videoTitle + "','" + videoAut + "')");
 						// Add the button
 						videoItems[b].appendChild(button);
 					}
@@ -128,7 +130,6 @@ function ytqnp() {
 			// Only add the playlist when it's not yet on the page
 			if(playlistq.length == 0)
 			{
-				
 				// Playlist container
 				var plst = document.createElement('div');
 				plst.id = "qnp-playlist-container";
@@ -257,7 +258,7 @@ function ytqnp() {
 				} else 
 				{
 					// If the playlist is empty, show a message.
-					var playlist = document.querySelectorAll('#qnp-playlist')[0];
+					var playlist = document.querySelector('#qnp-playlist');
 					var li = document.createElement('li');
 					var span = document.createElement('span');
 					span.style.padding = "0 10px";
@@ -299,9 +300,9 @@ function ytqnp() {
 		if(isCollapsed == "true")
 		{	
 			// open the list
-			var pc = document.querySelectorAll('#qnp-playlist-container')[0];
+			var pc = document.querySelector('#qnp-playlist-container');
 			pc.className = "watch-playlist"; 
-			var pl = document.querySelectorAll("#qnp-playlist")[0];
+			var pl = document.querySelector("#qnp-playlist");
 			pl.className = "playlist-videos-list yt-uix-scroller";
 			
 			// Set the icon
@@ -311,9 +312,9 @@ function ytqnp() {
 		else
 		{
 			// Close it
-			var pc = document.querySelectorAll('#qnp-playlist-container')[0];
+			var pc = document.querySelector('#qnp-playlist-container');
 			pc.className = "watch-playlist collapsed"; 
-			var pl = document.querySelectorAll("#qnp-playlist")[0];
+			var pl = document.querySelector("#qnp-playlist");
 			pl.className = "playlist-videos-list yt-uix-scroller collapsed";
 			
 			// Set the icon
@@ -328,9 +329,11 @@ function ytqnp() {
 	// Update the visual playlist
 	function _updatePlaylist()
 	{		
-		
 		// Empty the playlist UI
-		var qnpNode = document.querySelectorAll('#qnp-playlist')[0];
+		var qnpNode = document.querySelector('#qnp-playlist');
+		if (!qnpNode)
+			return;
+		
 		while (qnpNode.firstChild) {
 			qnpNode.removeChild(qnpNode.firstChild);
 		}
@@ -349,9 +352,9 @@ function ytqnp() {
 		{		
 		
 			// Remove the minimize state
-			var pc = document.querySelectorAll('#qnp-playlist-container')[0];
+			var pc = document.querySelector('#qnp-playlist-container');
 			pc.className = "watch-playlist"; 
-			var pl = document.querySelectorAll("#qnp-playlist")[0];
+			var pl = document.querySelector("#qnp-playlist");
 			pl.className = "playlist-videos-list yt-uix-scroller";
 			document.querySelector('a[data-collapse]').setAttribute('data-collapse', 'false');
 			document.querySelector('#qnp-collapser').className = 'yt-uix-button-icon qnp-btn-playlist-collapse-out yt-sprite';
@@ -437,40 +440,27 @@ function ytqnp() {
 	}
 	
 	// Queue a new video
-	function _queueVideo(video)
+	function _queueVideo(id, title, by)
 	{
-		// Retrieve the video data and create an object from it
-		var spl = video.split(',qnp,');
-		var video = {
-			id: spl[0],
-			title: spl[1],
-			by: spl[2]
-		}
-	
 		// Only queue when there is an object with values
-		if(video !== undefined)
+		if(id && title && by)
 		{
-			if(video.id !== undefined && video.id.length > 0
-				&& video.title !== undefined && video.title.length > 0
-				&& video.by !== undefined && video.by.length > 0)
-			{
-				_playlist.push(video);
-				_updatePlaylist();
-			}
-			
+			_playlist.push({
+				id: id,
+				title: title,
+				by: by
+			});
+			_updatePlaylist();
+		
 			// GA
 			if(window.yttqrcooldown == 0) {
-				yttqr('send', 'event', 'Queue \'n Play', 'queue', 'Queue \'n Play Queue Video');
+				circularify.omni.analytics.registerEvent('queue', id);
 				window.yttrcooldown = 1;
 				setTimeout(function() {
 					window.yttqrcooldown = 0;
 					console.info('-queue sent');
 				}, 1500);
 			}
-			
-		} else 
-		{
-			console.error('9312.2 - There was an error queueing a video.');
 		}
 	}
 	
@@ -518,7 +508,7 @@ function ytqnp() {
 										
 					// GA
 					if(window.yttqrcooldown == 0) {
-						yttqr('send', 'event', 'Queue \'n Play', 'queue', 'Queue \'n Play Play Video');
+						circularify.omni.analytics.registerEvent('play', newId);
 						window.yttrcooldown = 1;
 						setTimeout(function() {
 							window.yttqrcooldown = 0;
@@ -550,7 +540,7 @@ function ytqnp() {
 			
 				// GA
 				if(window.yttqrcooldown == 0) {
-					yttqr('send', 'event', 'Queue \'n Play', 'queue', 'Queue \'n Play Play Video');
+					circularify.omni.analytics.registerEvent('next', newId);
 					window.yttrcooldown = 1;
 					setTimeout(function() {
 						window.yttqrcooldown = 0;
@@ -568,10 +558,13 @@ function ytqnp() {
 		// 	from and to aren't the same.
 		if(fro != "" && to != "" && fro !== to)
 		{
-			_playlist.move(fro, to);
+			circularify.utils.arrayMoveItem(_playlist, fro, to);
 			_updatePlaylist();
 		}
 	}
+	
+	// Add the + buttons on the first run
+	_navigating();
 	
 	// Exposable Object
 	return {
