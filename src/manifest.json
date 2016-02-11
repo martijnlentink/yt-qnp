@@ -1,10 +1,11 @@
 {
 	"manifest_version": 2,
 	
-	"name": "Queue 'n Play",
+	"name": "Queue 'n Play for YouTube™",
 	"description": "__MSG_appDescription__",
-	"version": "0.3.1",  
+	"version": "0.4.0",  
 	"homepage_url": "https://chrome.google.com/webstore/detail/aeacgaahiiiemomjmmdcekmpkgcgfkff",
+	"short_name": "Queue 'n Play",
 
 	"icons": { 
 		"16": "img/icon.16.png",
