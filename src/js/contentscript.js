@@ -2,6 +2,9 @@
  * Queue 'n Play is an application developed by Circularify
  */
 
+ // Add QNP to the Circularify list of installed extension
+circularify.omni.register("qnp");
+
 // Reference the required files 
 circularify.omni.analytics.initialize('UA-50232941-4');
 circularify.omni.page.injectScript('js/dd.js');

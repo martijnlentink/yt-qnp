@@ -454,7 +454,7 @@ function ytqnp() {
 		
 			// GA
 			if(window.yttqrcooldown == 0) {
-				circularify.omni.analytics.registerEvent('queue', id);
+				circularify.omni.qnp.analytics.registerEvent('queue', id, 0, 'qnp');
 				window.yttrcooldown = 1;
 				setTimeout(function() {
 					window.yttqrcooldown = 0;
@@ -508,7 +508,7 @@ function ytqnp() {
 										
 					// GA
 					if(window.yttqrcooldown == 0) {
-						circularify.omni.analytics.registerEvent('play', newId);
+						circularify.omni.qnp.analytics.registerEvent('play', newId);
 						window.yttrcooldown = 1;
 						setTimeout(function() {
 							window.yttqrcooldown = 0;
@@ -540,7 +540,7 @@ function ytqnp() {
 			
 				// GA
 				if(window.yttqrcooldown == 0) {
-					circularify.omni.analytics.registerEvent('next', newId);
+					circularify.omni.qnp.analytics.registerEvent('next', newId);
 					window.yttrcooldown = 1;
 					setTimeout(function() {
 						window.yttqrcooldown = 0;
@@ -563,9 +563,6 @@ function ytqnp() {
 		}
 	}
 	
-	// Add the + buttons on the first run
-	_navigating();
-	
 	// Exposable Object
 	return {
 		playlist: _playlist,
@@ -586,6 +583,3 @@ var circularify = circularify || {};
 
 // Add YTSNP object to main
 circularify.ytqnp = circularify.ytqnp || ytqnp();
-
-// Add QNP to the Circularify list of installed extension
-circularify.omni.extensions.register("qnp");
