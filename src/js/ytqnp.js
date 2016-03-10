@@ -53,7 +53,9 @@ function ytqnp() {
 		for(var b = 0; b < videoItems.length; b++)
 		{
 			// Skip playlist and channel
-			if(videoItems[b].className.indexOf("yt-pl-thumb") == -1 && videoItems[b].parentElement.className.indexOf("yt-lockup-channel") == -1)
+			if(videoItems[b].className.indexOf("yt-pl-thumb") == -1 
+				&& videoItems[b].parentElement.className.indexOf("yt-lockup-channel") == -1
+				&& videoItems[b].parentElement.querySelector(".standalone-ypc-badge-renderer") == null)
 			{
 		
 				// Get the video ID for the current item in the results
