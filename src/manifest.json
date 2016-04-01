@@ -43,7 +43,8 @@
 		"js/core/modules.js",
 		"js/dd.js",
 		"js/ytqnp.js",
-		"css/ytqnp.css"
+		"css/ytqnp.css",
+		"upgrade-snp.html"
 	],
 	
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
