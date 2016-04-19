@@ -1,5 +1,6 @@
 body {
-  background-color: #db4437;
+  /*background-color: #db4437;*/
+  background-color: rgba(219, 68, 55, .7);
   font: normal normal normal normal 13px / 20px Roboto, 'Helvetica Neue', Helvetica, sans-serif;
 }
 
@@ -16,13 +17,21 @@ a:hover {
     text-decoration: underline;
 }
 
+.close {
+    cursor: pointer;
+    float: right;
+
+}
+
 .paper {
     box-shadow: rgba(0, 0, 0, 0.258824) 0px 2px 5px 0px;
     box-sizing: border-box;
     color: rgb(33, 33, 33);
     margin: 0 auto;
+    margin-top: 200px;
     width: 832px;
     background: rgb(255, 255, 255);
+    vertical-align: middle;
     padding: 64px;
 }/*#ARTICLE_1*/
 
@@ -116,16 +125,6 @@ a:hover {
     transform: matrix(0.75, 0, 0, 0.75, 0, 0);
     transform-origin: 16px 16px;
 }/*#SPAN_65*/
-
-ol:before {
-    content: '';
-    background-color:red;
-    position: absolute;
-    width: 2px;
-    height: 100%;
-    left: 0;
-    top: -19px;
-}
 
 button > span.twitter {
   background: rgba(0, 0, 0, 0) url("https://ssl.gstatic.com/support/content/images/sprites/social-mobile-a5f1fd25bf5737c8b69f5da6ace1ccc7.png") no-repeat scroll 0px 0px / auto padding-box border-box;

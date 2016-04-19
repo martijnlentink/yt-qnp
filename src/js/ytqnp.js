@@ -567,7 +567,10 @@ function ytqnp() {
 
 	function _upgradePopup(page)
 	{
-		document.body += "<iframe src='" + page + "'>";
+		if (document.getElementById('qnp-upgrade'))
+			return;
+		
+		document.body.innerHTML += "<iframe id='qnp-upgrade' scrolling=\"no\" frameborder=\"0px\" src='" + page + "'>";
 	}
 	
 	// Exposable Object
@@ -582,7 +585,7 @@ function ytqnp() {
 		navigating: _navigating,
 		collapse: _collapsePlaylist,
 		close: _hidePlaylistUI,
-		upgradePage: _upgradePopup
+		upgradePopup: _upgradePopup
 	}
 };
 
