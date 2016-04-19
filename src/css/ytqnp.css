@@ -188,3 +188,8 @@
 							font-size: 11px; 
 						} 
 						
+						#qnp-upgrade {
+							position: absolute;
+							z-index: 999;
+							left: 0;
+						}

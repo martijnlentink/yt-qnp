@@ -564,6 +564,11 @@ function ytqnp() {
 			_updatePlaylist();
 		}
 	}
+
+	function _upgradePopup(page)
+	{
+		document.body += "<iframe src='" + page + "'>";
+	}
 	
 	// Exposable Object
 	return {
@@ -576,7 +581,8 @@ function ytqnp() {
 		reorder: _reorder,
 		navigating: _navigating,
 		collapse: _collapsePlaylist,
-		close: _hidePlaylistUI
+		close: _hidePlaylistUI,
+		upgradePage: _upgradePopup
 	}
 };
 
