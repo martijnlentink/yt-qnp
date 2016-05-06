@@ -12,7 +12,7 @@ function ytqnp() {
 	function _navigating(url) 
 	{
 		url = url || document.location.href;
-		if(circularify.ytsnp.shouldCornerize(url))
+		if(window.YTSNPIsCorner)
 		{
 			// Add the buttons
 			_insertQueueButtons();
