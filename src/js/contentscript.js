@@ -14,8 +14,14 @@ circularify.omni.page.injectCss('css/ytqnp.css');
 // Main method.
 circularify.omni.page.injectScript(function (upgradeUrl) {
 	window.addEventListener("circReady", function () {
-		circularify.utils.executeOrSubscribeOtherwise(100, circularify.core.events.extRegistered, { id: 'snp' }, _snpRegistered, _failedToRegister);
-		circularify.utils.executeOrSubscribe(circularify.core.events.extRegistered, { id: 'qnp' }, _qnpRegistered);
+		// We may be listening to the circReady event of the content script
+		// In that case ignore it and wait for the page!
+		if (typeof circularify === 'undefined')
+			return;
+
+		window.removeEventListener(circularify.core.events.circReady, this);
+		circularify.utils.executeOrSubscribeOtherwise(2000, circularify.core.events.extRegistered, { id: 'snp' }, _snpRegistered, _failedToRegister);
+		circularify.utils.executeOrSubscribe(circularify.core.events.extRegistered, _qnpRegistered, { id: 'qnp' });
 
 		// Navigating function
 		function _qnpNavigating(ev)
@@ -31,6 +37,7 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 		}
 
 		function _snpRegistered(ev) {
+			circularify.debug.log(ev.detail);
 			if (!circularify.utils.checkMinVersion('2.2.0', ev.detail.version))
 			{
 				circularify.ytqnp.upgradePopup(upgradeUrl);
