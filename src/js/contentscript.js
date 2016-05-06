@@ -13,31 +13,27 @@ circularify.omni.page.injectCss('css/ytqnp.css');
 
 // Main method.
 circularify.omni.page.injectScript(function (upgradeUrl) {
-	debugger;
-	window.addEventListener("extRegistered", _extensionRegisteredEventHandler);
+	window.addEventListener("circReady", function () {
+		circularify.utils.executeOrSubscribeOtherwise(100, circularify.core.events.extRegistered, { id: 'snp' }, _snpRegistered, _failedToRegister);
+		circularify.utils.executeOrSubscribe(circularify.core.events.extRegistered, { id: 'qnp' }, _qnpRegistered);
 
-	// Navigating function
-	function _qnpNavigating(ev)
-	{
-		circularify.ytqnp.navigating(ev.detail.url);
-	}
+		// Navigating function
+		function _qnpNavigating(ev)
+		{
+			circularify.ytqnp.navigating(ev.detail.url);
+		}
 
-	function _registerPlayerEvents() {
-		// So if Seek 'n Play is installed, subscribe to the events
-		var player = circularify.ytapi.getPlayer();
-		// Subscribe to the onStateChange event on the player object
-		player.addEventListener("onStateChange", circularify.ytqnp.next);
-	}
-	
-	// Subscribe QNP
-	function _extensionRegisteredEventHandler(ev) {
-		// We want the extension to work only when Seek 'n Play is installed
-		if(ev.detail.id == "snp") {
-			debugger;
+		function _registerPlayerEvents() {
+			// So if Seek 'n Play is installed, subscribe to the events
+			var player = circularify.ytapi.getPlayer();
+			// Subscribe to the onStateChange event on the player object
+			player.addEventListener("onStateChange", circularify.ytqnp.next);
+		}
+
+		function _snpRegistered(ev) {
 			if (!circularify.utils.checkMinVersion('2.2.0', ev.detail.version))
 			{
 				circularify.ytqnp.upgradePopup(upgradeUrl);
-				// In this case we need to show  *chrome-extension://lgahoobfpnjaccckblfadmfbdcceegop/upgrade-snp.html*
 				return;
 			}
 			if (circularify.ytapi.isPlayerReady)
@@ -45,19 +41,24 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 			else
 				window.addEventListener("ytPlayerReady", _registerPlayerEvents);
 		}
-		if(ev.detail.id == "qnp") {
+
+		function _qnpRegistered(ev) {
 			window.addEventListener("spfdone", _qnpNavigating);
 		}
-	}
 
-	window.yttqrcooldown = 0;
-	
-	addEventListener("message", function(ev) {
-			if(ev.data === "closePopup") {
-				var ifr = document.getElementById("qnp-upgrade");
-				ifr.parentNode.removeChild(ifr);
-			}
+		function _failedToRegister() {
+			circularify.debug.log('Failed to find SNP');
+			circularify.ytqnp.upgradePopup(upgradeUrl);
+		}
+
+		window.yttqrcooldown = 0;
+		
+		addEventListener("message", function(ev) {
+				if(ev.data === "closePopup") {
+					var ifr = document.getElementById("qnp-upgrade");
+					ifr.parentNode.removeChild(ifr);
+				}
+		});
 	});
-	
 }, chrome.runtime.getURL('html/upgrade-snp.html'));
 
