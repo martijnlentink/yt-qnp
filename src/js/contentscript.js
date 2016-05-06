@@ -34,6 +34,7 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 		// We want the extension to work only when Seek 'n Play is installed
 		if(ev.detail.id == "snp") {
 			debugger;
+			if (!circularify.utils.checkMinVersion('2.2.0', ev.detail.version))
 			{
 				circularify.ytqnp.upgradePopup(upgradeUrl);
 				// In this case we need to show  *chrome-extension://lgahoobfpnjaccckblfadmfbdcceegop/upgrade-snp.html*
