@@ -12,8 +12,8 @@ circularify.omni.page.injectScript('js/ytqnp.js');
 circularify.omni.page.injectCss('css/ytqnp.css');
 
 // Main method.
-circularify.omni.page.injectScript(function () {
-	
+circularify.omni.page.injectScript(function (upgradeUrl) {
+	debugger;
 	window.addEventListener("extRegistered", _extensionRegisteredEventHandler);
 
 	// Navigating function
@@ -34,9 +34,8 @@ circularify.omni.page.injectScript(function () {
 		// We want the extension to work only when Seek 'n Play is installed
 		if(ev.detail.id == "snp") {
 			debugger;
-			if (!circularify.utils.checkMinVersion('2.9.0', ev.detail.version))
 			{
-				circularify.ytqnp.upgradePopup('chrome-extension://lgahoobfpnjaccckblfadmfbdcceegop/upgrade-snp.html');
+				circularify.ytqnp.upgradePopup(upgradeUrl);
 				// In this case we need to show  *chrome-extension://lgahoobfpnjaccckblfadmfbdcceegop/upgrade-snp.html*
 				return;
 			}
@@ -51,5 +50,13 @@ circularify.omni.page.injectScript(function () {
 	}
 
 	window.yttqrcooldown = 0;
-});
+	
+	addEventListener("message", function(ev) {
+			if(ev.data === "closePopup") {
+				var ifr = document.getElementById("qnp-upgrade");
+				ifr.parentNode.removeChild(ifr);
+			}
+	});
+	
+}, chrome.runtime.getURL('html/upgrade-snp.html'));
 

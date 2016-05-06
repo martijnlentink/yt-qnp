@@ -460,7 +460,7 @@ function ytqnp() {
 				window.yttrcooldown = 1;
 				setTimeout(function() {
 					window.yttqrcooldown = 0;
-					console.info('-queue sent');
+					circularify.debug.info('-queue sent');
 				}, 1500);
 			}
 		}
@@ -514,7 +514,7 @@ function ytqnp() {
 						window.yttrcooldown = 1;
 						setTimeout(function() {
 							window.yttqrcooldown = 0;
-							console.info('--playnext sent');
+							circularify.debug.info('--playnext sent');
 						}, 1500);
 					}
 				}
@@ -546,7 +546,7 @@ function ytqnp() {
 					window.yttrcooldown = 1;
 					setTimeout(function() {
 						window.yttqrcooldown = 0;
-						console.info('--playnext sent');
+						circularify.debug.info('--playnext sent');
 					}, 1500);
 				}
 			}
