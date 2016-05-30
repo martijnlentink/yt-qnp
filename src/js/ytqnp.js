@@ -483,42 +483,42 @@ function ytqnp() {
 		return next;
 	}
 	
+	var _prevEvent = -1;
 	// Play the next video
 	function _playNext(event)
 	{		
-		if(window.YTSNPIsCorner)
+		//if(window.YTSNPIsCorner)
 		{		
 			// When the player has finished playing
-			if(event == 0) 
-			{			
-				// Only queue a video when there are videos queued
-				if(_playlist.length > 0)
-				{
-					// Reference the player api
-					var player = circularify.ytapi.getPlayer();
-					
-					// Get the first video ID
-					var newId = _dequeueVideo().id;
-					
-					// Queue the video and start playing
-					player.cueVideoById(newId);
-					
+			// Only queue a video when there are videos queued
+			if(event == 0 && _playlist.length > 0 && _prevEvent != 0) 
+			{	
+				circularify.debug.log("Play next");		
+				// Reference the player api
+				var player = circularify.ytapi.getPlayer();
+				
+				// Get the first video ID
+				var newId = _dequeueVideo().id;
+				
+				// Queue the video and start playing
+				player.cueVideoById(newId);
+				
+				setTimeout(function() {
+					player.playVideo();
+					clearTimeout(this);
+				}, 1000);
+									
+				// GA
+				if(window.yttqrcooldown == 0) {
+					circularify.omni.qnp.analytics.registerEvent('play', newId);
+					window.yttrcooldown = 1;
 					setTimeout(function() {
-						player.playVideo();
-						clearTimeout(this);
-					}, 1000);
-										
-					// GA
-					if(window.yttqrcooldown == 0) {
-						circularify.omni.qnp.analytics.registerEvent('play', newId);
-						window.yttrcooldown = 1;
-						setTimeout(function() {
-							window.yttqrcooldown = 0;
-							circularify.debug.info('--playnext sent');
-						}, 1500);
-					}
+						window.yttqrcooldown = 0;
+						circularify.debug.info('--playnext sent');
+					}, 1500);
 				}
 			}
+			_prevEvent = event;
 		}
 	}
 	

@@ -13,7 +13,7 @@ circularify.omni.page.injectCss('css/ytqnp.css');
 
 // Main method.
 circularify.omni.page.injectScript(function (upgradeUrl) {
-	window.addEventListener("circReady", function () {
+	var circReady = function () {
 		// We may be listening to the circReady event of the content script
 		// In that case ignore it and wait for the page!
 		if (typeof circularify === 'undefined')
@@ -31,6 +31,7 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 		}
 
 		function _registerPlayerEvents() {
+			circularify.debug.log("Call to register");
 			if (_isRegistered)
 				return;
 			_isRegistered = true;
@@ -70,6 +71,7 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 					ifr.parentNode.removeChild(ifr);
 				}
 		});
-	});
+	};
+	(typeof circularify !== 'undefined' && circReady()) || window.addEventListener("circReady", circReady);
 }, chrome.runtime.getURL('html/upgrade-snp.html'));
 
