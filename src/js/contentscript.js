@@ -18,6 +18,7 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 		// In that case ignore it and wait for the page!
 		if (typeof circularify === 'undefined')
 			return;
+		var _isRegistered = false;
 
 		window.removeEventListener(circularify.core.events.circReady, this);
 		circularify.utils.executeOrSubscribeOtherwise(2000, circularify.core.events.extRegistered, { id: 'snp' }, _snpRegistered, _failedToRegister);
@@ -30,6 +31,9 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 		}
 
 		function _registerPlayerEvents() {
+			if (_isRegistered)
+				return;
+			_isRegistered = true;
 			// So if Seek 'n Play is installed, subscribe to the events
 			var player = circularify.ytapi.getPlayer();
 			// Subscribe to the onStateChange event on the player object
