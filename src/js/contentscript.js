@@ -71,6 +71,8 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 					ifr.parentNode.removeChild(ifr);
 				}
 		});
+
+		return true;
 	};
 	(typeof circularify !== 'undefined' && circReady()) || window.addEventListener("circReady", circReady);
 }, chrome.runtime.getURL('html/upgrade-snp.html'));

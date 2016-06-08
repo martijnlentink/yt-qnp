@@ -7,25 +7,42 @@ function ytqnp() {
 	
 	// Contains all the queued videos
 	var _playlist  = [];
+
+	function _getPostionOnPage(element)
+	{
+		if (!element)
+			return;
+
+		var rect = element.getBoundingClientRect();
+
+		return {
+			left: rect.left + window.scrollX,
+			top: rect.top + window.scrollY,
+			right: rect.left + rect.width + window.scrollX,
+			bottom: rect.top + rect.height + window.scrollY,
+			width: rect.width,
+			height: rect.height
+		};
+	}
 		
 	// Navigating function for QNP
 	function _navigating(url) 
 	{
 		url = url || document.location.href;
-		if(window.YTSNPIsCorner)
-		{
+		// if(window.YTSNPIsCorner)
+		// {
 			// Add the buttons
 			_insertQueueButtons();
 			_createPlaylistUI();
 			_hidePlayerButtons(true);
-		}
-		else 
-		{
-			// Remove the buttons
-			// _hideQueueButtons();
-			_hidePlaylistUI();
-			_hidePlayerButtons(false);
-		}
+		// }
+		// else 
+		// {
+		// 	// Remove the buttons
+		// 	// _hideQueueButtons();
+		// 	_hidePlaylistUI();
+		// 	_hidePlayerButtons(false);
+		// }
 	}
 	
 	// Change behavior of the Play Next button from YouTube
@@ -125,7 +142,7 @@ function ytqnp() {
 	function _createPlaylistUI()
 	{	
 		// It should only show when SnP is cornerized
-		if(window.YTSNPIsCorner)
+		//if(window.YTSNPIsCorner)
 		{			
 			var playlistq = document.querySelectorAll('#qnp-playlist-container');
 			
@@ -134,8 +151,17 @@ function ytqnp() {
 			{
 				// Playlist container
 				var plst = document.createElement('div');
-				plst.id = "qnp-playlist-container";
-				plst.className = "watch-playlist collapsed";
+				plst.id = 'qnp-playlist-container';
+					console.log(window.YTSNPIsCorner);
+				if (window.YTSNPIsCorner)
+				{
+					plst.className = "qnp-playlist-container";
+				}
+				else
+				{
+					plst.className = "watch-playlist collapsed player-height";
+					document.getElementById("placeholder-playlist").className = "watch-playlist player-height";
+				}
 			
 				// Main Content
 				var cnt = document.createElement('div');
@@ -251,7 +277,10 @@ function ytqnp() {
 				plst.appendChild(cnt);
 				
 				// Add the playlist
-				document.body.appendChild(plst);
+				if (window.YTSNPIsCorner)
+					document.body.appendChild(plst);
+				else	
+					document.getElementById("player-playlist").appendChild(plst);
 				
 				if(_playlist.length > 0)
 				{
@@ -415,11 +444,11 @@ function ytqnp() {
 				
 				var title = document.createElement('h4');
 				title.className = "yt-ui-ellipsis yt-ui-ellipsis-2";
-				title.innerHTML = current.title;			
+				title.innerHTML = circularify.utils.htmlUnescape(current.title);
 				var uploader = document.createElement('span');
 				uploader.className = "video-uploader-byline";
 				var uplsub = document.createElement('span');
-				uplsub.innerHTML = "by <strong>" + current.by + "</strong>";
+				uplsub.innerHTML = "by <strong>" + circularify.utils.htmlUnescape(current.by) + "</strong>";
 				
 				// Wrap up Description
 				eDesc.appendChild(title);
