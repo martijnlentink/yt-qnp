@@ -1,3 +1,243 @@
+var templ = '<div ng-cloak ng-controller="playlist" id="player-playlist" class="content-alignment watch-player-playlist"><div id="watch-appbar-playlist" class="watch-playlist player-height"> <div class="main-content"> <div class="playlist-header"> <div class="playlist-header-content"> <div class="appbar-playlist-controls clearfix"> </div> <div class="playlist-info"> <h3 class="playlist-title"> <a href="#" class="yt-uix-sessionlink spf-link">Queue &#8216;n Playlist</a> </h3> <ul class="playlist-details"> <li class="author-attribution"> <a href="#" class="yt-uix-sessionlink spf-link">by you</a> </li> <li class="playlist-progress"> <span id="playlist-current-index">1</span><span id="playlist-length">66 videos</span> </li> </ul> </div> </div> <div class="control-bar clearfix"> <div class="playlist-nav-controls"> <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-player-controls yt-uix-button-empty yt-uix-button-has-icon toggle-loop yt-uix-button-opacity yt-uix-tooltip yt-uix-tooltip" type="button" onclick=";return false;" title="Repeat playlist" data-button-toggle="true"><span class="yt-uix-button-icon-wrapper"><span class="yt-uix-button-icon yt-uix-button-icon-watch-appbar-autoplay yt-sprite"></span></span></button> <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-player-controls yt-uix-button-empty yt-uix-button-has-icon shuffle-playlist yt-uix-button-opacity yt-uix-tooltip yt-uix-tooltip" type="button" onclick=";return false;" title="Shuffle" data-button-toggle="true"><span class="yt-uix-button-icon-wrapper"><span class="yt-uix-button-icon yt-uix-button-icon-watch-appbar-shuffle-video-list yt-sprite"></span></span></button> </div> <div class="playlist-behavior-controls"> <!-- <a href="/watch?v=Qi5PeoL4_r4" class="yt-uix-button hid prev-playlist-list-item yt-uix-button-opacity yt-uix-tooltip yt-uix-tooltip-masked spf-link yt-uix-button-player-controls yt-uix-button-size-default yt-uix-button-has-icon yt-uix-tooltip yt-uix-button-empty" data-shuffle-prev-clicktracking="" data-loop_shuffle-prev-clicktracking="CBQQ0TkiEwjA9urs85_NAhUQxxYKHXRYB8Uo-B0yB2JmX3ByZXZI-Zq8n8KXqfjsAQ" data-normal-prev-clicktracking="" data-loop-prev-clicktracking="CBQQ0TkiEwjA9urs85_NAhUQxxYKHXRYB8Uo-B0yB2JmX3ByZXZI-Zq8n8KXqfjsAQ" title="Previous video"><span class="yt-uix-button-icon-wrapper"><span class="yt-uix-button-icon yt-uix-button-icon-watch-appbar-play-prev yt-sprite"></span></span></a> --> <a href="/watch?v={{ videos[0].id }}" class="yt-uix-button hid next-playlist-list-item yt-uix-button-opacity yt-uix-tooltip spf-link yt-uix-button-player-controls yt-uix-button-size-default yt-uix-button-has-icon yt-uix-tooltip yt-uix-button-empty" data-loop_shuffle-next-clicktracking="CBQQ0TkiEwjA9urs85_NAhUQxxYKHXRYB8Uo-B0yB2JmX25leHRI-Zq8n8KXqfjsAQ" data-shuffle-next-clicktracking="CBQQ0TkiEwjA9urs85_NAhUQxxYKHXRYB8Uo-B0yB2JmX25leHRI-Zq8n8KXqfjsAQ" data-normal-next-clicktracking="CBQQ0TkiEwjA9urs85_NAhUQxxYKHXRYB8Uo-B0yB2JmX25leHRI-Zq8n8KXqfjsAQ" data-loop-next-clicktracking="CBQQ0TkiEwjA9urs85_NAhUQxxYKHXRYB8Uo-B0yB2JmX25leHRI-Zq8n8KXqfjsAQ" title="Next video"><span class="yt-uix-button-icon-wrapper"><span class="yt-uix-button-icon yt-uix-button-icon-watch-appbar-play-next yt-sprite"></span></span></a> </div> </div> </div> <div class="playlist-videos-container yt-scrollbar-dark yt-scrollbar"> <ol id="playlist-autoscroll-list" class="playlist-videos-list yt-uix-scroller" data-scroll-action="yt.www.watch.lists.loadThumbnails" data-scroller-mousewheel-listener="" data-scroller-scroll-listener="" data-scroller-offset="0"> <li ng-repeat="video in videos" class="yt-uix-scroller-scroll-unit" ng-class="isCurrentVideo(video.id) ? \'currently-playing\' : \'\'"> <span class="index"> {{ isCurrentVideo(video.id) ? \'▶\' : ($index + 1) }} </span> <a href="/watch?v={{ video.id }}" class="yt-uix-sessionlink spf-link playlist-video clearfix spf-link"> <span class="video-thumb yt-thumb yt-thumb-72"> <span class="yt-thumb-default"> <span class="yt-thumb-clip"> <img width="72" aria-hidden="true" src="https://i.ytimg.com/vi/{{ video.id }}/hqdefault.jpg" alt=""> <span class="vertical-align"></span> </span> </span> </span> <div class="playlist-video-description"> <h4 class="yt-ui-ellipsis yt-ui-ellipsis-2"> {{ video.title }} </h4> <span class="video-uploader-byline"> <span class="" data-ytid="UCf3cbfAXgPFL6OywH7JwOzA">{{ video.author }}</span> </span> </div> </a> </li> </ol> </div> </div> </div>';
+var plus = '<button class="yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-tooltip qnp-button" type="button" role="button" title="Add to queue" data-video-ids="{{ id }}" data-tooltip-text="Add to queue" ng-click="queueVideo(this)" aria-labelledby="yt-uix-tooltip744-arialabel"></button>';
+var smallList = '<div ng-cloak ng-controller="mini-playlist" id="qnp-playlist-container" class="watch-playlist" ng-hide="isHidden" ng-class="isCollapsed ? \'collapsed\' : \'\'"> <div class="main-content"> <div class="playlist-header"> <div class="playlist-header-content" data-list-title="Queue \'n Playlist"> <div class="app-bar-playlist-controls"><a class="yt-uix-button-player-controls" title="Close playlist" data-tooltip-text="Close playlist" ng-click="hide()"><span class="yt-uix-button-icon-wrapper"><span class="yt-uix-button-icon qnp-btn-playlist-close yt-sprite"></span></span></a></div> <div class="app-bar-playlist-controls-collapse"><a class="yt-uix-button-player-controls" title="Collapse" data-tooltip-text="Collapse" data-collapse="false" ng-click="collapse()"><span class="yt-uix-button-icon-wrapper"><span id="qnp-collapser" class="yt-uix-button-icon qnp-btn-playlist-collapse-out yt-sprite"></span></span></a></div> <div class="playlist-info"> <h3 class="playlist-title"> <a class="yt-uix-sessionlink">Queue \'n Playlist</a> <ul class="playlist-details"> <li class="author-attribution">by you</li> </ul> </h3> </div> </div> <div class="control-bar clearfix"></div> </div> <div class="playlist-videos-container yt-scrollbar-dark yt-scrollbar"> <ol "isCollapsed ? \'collapsed\' : \'\'" id="qnp-playlist" class="playlist-videos-list yt-uix-scroller " data-scroller-offset="0" data-scroller-mousewheellistener="" data-scroller-scroll-listener="" data-scroller-mousewheel-listener=""> <li ng-repeat="video in videos" class="yt-uix-scroller-scroll-unit" ng-class="isCurrentVideo(video.id) ? \'currently-playing\' : \'\'"> <span class="index"> {{ isCurrentVideo(video.id) ? \'▶\' : ($index + 1) }} </span> <a href="/watch?v={{ video.id }}" class="yt-uix-sessionlink spf-link playlist-video clearfix spf-link"> <span class="video-thumb yt-thumb yt-thumb-72"> <span class="yt-thumb-default"> <span class="yt-thumb-clip"> <img width="72" aria-hidden="true" src="https://i.ytimg.com/vi/{{ video.id }}/hqdefault.jpg" alt=""> <span class="vertical-align"></span> </span> </span> </span> <div class="playlist-video-description"> <h4 class="yt-ui-ellipsis yt-ui-ellipsis-2"> {{ video.title }} </h4> <span class="video-uploader-byline"> <span class="" data-ytid="UCf3cbfAXgPFL6OywH7JwOzA">{{ video.author }}</span> </span> </div> </a> </li> <li ng-show="videos.length == 0"><span style="padding: 0px 10px;">All dem empty spaces..</span></li> </ol> </div> </div> </div>';
+
+
+function TryAngular()
+{
+	if (angular && angular.bootstrap)
+		return;
+	var script = document.createElement("script");
+	script.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js";
+	document.head.appendChild(script);
+	var div = document.createElement('div');
+	div.innerHTML = smallList;
+	document.body.appendChild(div.firstChild);
+	document.getElementsByTagName("html")[0].setAttribute("ng-app", "app");
+	//document.body.setAttribute("ng-controller", "main");
+
+	var app = angular.module('app', []);
+	app.run(function ($rootScope, $compile) {
+		$rootScope.videos = [];
+
+		$rootScope.queueVideo = function(el) {
+			var el = event.target;
+			while (el.tagName != "LI")
+				el = el.parentNode;
+
+			var by = el.querySelector(".g-hovercard").innerHTML;
+			var id = null;
+			var idEl = el.querySelector("[data-video-ids]");
+			if (idEl)
+				id = idEl.getAttribute("data-video-ids");
+			if (!id && (idEl = el.querySelector("[data-vid]")))
+				id = idEl.getAttribute("data-vid");
+			if (!id)
+				return;
+			var title = el.querySelector("a[href^='/watch?v='][title]").getAttribute("title");
+
+			$rootScope.videos.push({
+		  		title: title,
+		  		id: id,
+		  		author: by
+		  	});
+	  	};
+
+	  	$rootScope.dequeue = function () {
+	  		if ($rootScope.videos.length == 0)
+	  			return;
+			yt.window.navigate("/watch?v="+$rootScope.videos[0].id);
+	  		$rootScope.videos.splice(0, 1);
+	  	};
+
+	  	$rootScope.addPlus = function (element) {
+	  		var el = angular.element(element);
+	  		var compiled = $compile("<qnp-plus/>")($rootScope);
+	  		el.append(compiled);
+	  	};
+	});
+
+	app.factory("kjoe", function($compile) {
+		var service = {};
+
+		service.queue = function (video) {
+			videos = window.YTQNPQueue || [];
+			videos.push(video);
+			window.YTQNPQueue = videos;
+			angular.element(document.querySelector("[ng-controller='mini-playlist']")).scope().$apply();
+		};
+
+		service.getVideos = function () {
+			return window.YTQNPQueue;
+		};
+
+		return service;
+	});
+
+	app.directive("qnpPlus", function ($compile) {
+		return {
+			template: plus,
+			restrict: 'E'
+		};
+	});
+
+	app.directive("qnpPlaylist", function ($compile) {
+		return {
+			template: templ,
+			restrict: 'E'
+		};
+	});
+
+	app.controller('playlist', function($scope, $rootScope, $compile, kjoe) {
+	  $scope.isCurrentVideo = function (vidId) {
+	  	return vidId == circularify.ytapi.getVideoId();
+	  };
+
+	  circularify.ytapi.getPlayer().addEventListener("onStateChange", function (ev) {
+		if (ev != 0)
+			return;
+			var videos = $scope.videos;
+			if (videos.length > 0)
+				$scope.$apply($scope.dequeue);
+		});
+
+	  $scope.createPlus = function (parEl) {
+			parEl.setAttribute("data-qnp-processed", "true");
+			var vidElements = parEl.querySelectorAll(".related-list-item:not(.ng-scope),.yt-lockup-video:not(.ng-scope)");
+			for(k = 0; k < vidElements.length; k++) {
+				var vidEl = vidElements[k];
+				var vidThum = vidEl.querySelector(".yt-lockup-thumbnail,.thumb-wrapper");
+				if (!vidThum)
+					continue;
+				$rootScope.addPlus(vidThum);
+			}
+		};
+
+	window.addEventListener("spfdone", function() {
+		initPlusListener();
+		// var playlistEl = document.querySelector("#player-playlist:not(.ng-scope)");
+		// if (!playlistEl)
+		// 	return;
+		// playlistEl.outerHTML = "<qnp-playlist/>";
+		var placeholder = angular.element(document.getElementById("placeholder-playlist"));
+		var playlistEl = angular.element(document.querySelector("#player-playlist:not(.ng-scope)"));
+		var qnpPlaylist = $compile("<qnp-playlist/>")($scope);
+		if (playlistEl)
+		{
+			playlistEl.replaceWith(qnpPlaylist);
+			// playlistEl.parentNode.insertBefore(qnpPlaylist, playlistEl);
+			// playlistEl.parentNode.removeChild(playlistEl);
+		}
+		else
+		{
+			placeholder.className = placeholder.className.replace("hid", '');
+			angular.element(placeholder).append(qnpPlaylist);
+			//placeholder.innerHTML += "<qnp-playlist/>";
+		}
+		circularify.utils.wait(function () { return document.readyState == "complete" }, function() { nxt(); });
+		$scope.$apply();
+	});
+
+		var initPlusListener = function () {
+	  circularify.utils.wait(function () { return document.readyState == "complete" }, function() {
+			var cont = document.getElementById("body-container");
+			var observer = new MutationObserver(function (mutations) {
+				for(var i=0; i<mutations.length; ++i) {
+					//yt-lockup-thumbnail
+			        // look through all added nodes of this mutation
+			        for(var j=0; j<mutations[i].addedNodes.length; ++j) {
+			        	if ( (mutations[i].addedNodes[j].innerHTML || "").indexOf("yt-lockup-video") > -1) {
+			        		$scope.$apply($scope.createPlus(mutations[i].addedNodes[j]));
+			        	}
+			        }
+			    }
+			});
+			observer.observe(cont, { subtree: true, childList: true });
+			$scope.$apply($scope.createPlus(document.body));
+		}); };
+	  initPlusListener();
+	});
+	app.controller('mini-playlist', function ($scope, $compile, kjoe) {
+		$scope.isHidden = !window.YTSNPIsCorner;
+		$scope.isCollapsed = false;
+
+		$scope.hide = function (shouldHide) {
+			if (typeof shouldHide === 'undefined')
+				shouldHide = true;
+			$scope.isHidden = shouldHide;
+		};
+
+		$scope.collapse = function () {
+			$scope.isCollapsed = true;
+		}
+
+		window.addEventListener("spfdone", function() { 
+			$scope.hide(!window.YTSNPIsCorner);
+			$scope.$apply();
+		});
+
+	});
+
+	nxt();
+}
+
+function nxt() {
+	var placeholder = document.getElementById("placeholder-playlist");
+	var playlistEl = document.querySelector("#player-playlist:not(.ng-scope)");
+	if (playlistEl)
+		playlistEl.outerHTML = templ;
+	else
+	{
+		placeholder.className = placeholder.className.replace("hid", '');
+		placeholder.innerHTML += templ;
+	}
+	if (placeholder)
+	{
+		placeholder.className = "watch-playlist player-height";
+		placeholder.style.display = "auto";	
+		var playlistElGetSet = Object.getOwnPropertyDescriptor(placeholder, 'innerHTML');
+		if (!playlistElGetSet)
+		{
+			// YouTube likes to set the innerHTML of the playlist to an empty string.
+			// If we allow that every page navigation we need to refresh reinit the playlist with angular
+			// Which is way too slow. With a custom get/set we can check if the string to set is empty
+			placeholder.__defineGetter__(
+			    'innerHTML',
+			    function(){
+			      var outer = this.outerHTML;
+			      return outer.substr(outer.indexOf(">") + 1, outer.lastIndexOf("</") - outer.indexOf(">") - 1);
+			    }
+			  );
+			  
+			  placeholder.__defineSetter__("innerHTML", function (html) {
+			  	if (html == '')
+			    	return;
+			      
+			      var start = this.outerHTML.substr(0, this.outerHTML.indexOf(">") + 1);
+			      var end = this.outerHTML.substr(this.outerHTML.lastIndexOf("</"), this.outerHTML.length - this.outerHTML.lastIndexOf("</"));
+			      this.outerHTML = start + html + end;
+			  });
+		}
+	}
+	// circularify.utils.wait(function () { return document.readyState == "complete" }, function () {
+			// angular.bootstrap(document.querySelectorAll("[ng-controller]:not(.ng-scope)"), ["app"]);
+	// 	});	
+
+	// circularify.utils.wait(function () { return document.querySelector(".related-list-item") && angular && angular.bootstrap; }, function() {
+	// 	var lockups = document.querySelectorAll(".related-list-item:not(.ng-scope),.yt-lockup-video:not(.ng-scope)");
+	// 	for (var i = lockups.length - 1; i >= 0; i--) {
+	// 		lockups[i].setAttribute("ng-controller", "video-teaser");
+	// 		lockups[i].innerHTML += plus;
+	// 	};
+		
+	// 	angular.bootstrap(document.querySelectorAll("[ng-controller]:not(.ng-scope)"), ["app"]);
+	// });
+}
+
+
+
+TryAngular();
+
 /*
  * Queue 'n Play is an application developed by Circularify
  */
@@ -29,20 +269,23 @@ function ytqnp() {
 	function _navigating(url) 
 	{
 		url = url || document.location.href;
-		// if(window.YTSNPIsCorner)
-		// {
+
+		// nxt();
+
+		if(window.YTSNPIsCorner)
+		{
 			// Add the buttons
 			_insertQueueButtons();
+	// return;
 			_createPlaylistUI();
 			_hidePlayerButtons(true);
-		// }
-		// else 
-		// {
-		// 	// Remove the buttons
-		// 	// _hideQueueButtons();
-		// 	_hidePlaylistUI();
-		// 	_hidePlayerButtons(false);
-		// }
+		}
+		else 
+		{
+			// Remove the buttons
+			// _hideQueueButtons();
+			_hidePlayerButtons(false);
+		}
 	}
 	
 	// Change behavior of the Play Next button from YouTube
@@ -62,7 +305,7 @@ function ytqnp() {
 	
 	// Insert the Queue buttons
 	function _insertQueueButtons()
-	{
+	{return;
 		// Get all search results
 		var videoItems = document.querySelectorAll('.yt-lockup-thumbnail');
 		
@@ -112,6 +355,7 @@ function ytqnp() {
 						button.setAttribute('data-video-ids', videoId); // This is the video to play
 						button.setAttribute('data-tooltip-text', 'Add to queue');
 						button.setAttribute('onclick', "circularify.ytqnp.queue('" + videoId + "','" + videoTitle + "','" + videoAut + "')");
+						button.setAttribute('ng-click', "queue('" + videoId + "','" + videoTitle + "','" + videoAut + "')");
 						// Add the button
 						videoItems[b].appendChild(button);
 					}
@@ -140,9 +384,10 @@ function ytqnp() {
 	
 	// Create the UI for the playlist
 	function _createPlaylistUI()
-	{	
+	{
+		return;
 		// It should only show when SnP is cornerized
-		//if(window.YTSNPIsCorner)
+		if(window.YTSNPIsCorner)
 		{			
 			var playlistq = document.querySelectorAll('#qnp-playlist-container');
 			
@@ -151,17 +396,8 @@ function ytqnp() {
 			{
 				// Playlist container
 				var plst = document.createElement('div');
-				plst.id = 'qnp-playlist-container';
-					console.log(window.YTSNPIsCorner);
-				if (window.YTSNPIsCorner)
-				{
-					plst.className = "qnp-playlist-container";
-				}
-				else
-				{
-					plst.className = "watch-playlist collapsed player-height";
-					document.getElementById("placeholder-playlist").className = "watch-playlist player-height";
-				}
+				plst.id = "qnp-playlist-container";
+				plst.className = "watch-playlist collapsed";
 			
 				// Main Content
 				var cnt = document.createElement('div');
@@ -277,10 +513,7 @@ function ytqnp() {
 				plst.appendChild(cnt);
 				
 				// Add the playlist
-				if (window.YTSNPIsCorner)
-					document.body.appendChild(plst);
-				else	
-					document.getElementById("player-playlist").appendChild(plst);
+				document.body.appendChild(plst);
 				
 				if(_playlist.length > 0)
 				{
@@ -298,11 +531,6 @@ function ytqnp() {
 					playlist.appendChild(li);
 				}
 			} 
-			else if(playlistq.length == 1)
-			{
-				// Show the playlist
-				playlistq[0].style.display = "block";
-			}
 		}
 	}
 	
@@ -319,6 +547,13 @@ function ytqnp() {
 			plst[0].style.display = 'none';
 		}
 	}
+
+	function _toggleClass(el, className) {
+		if (el.className.indexOf(className) > -1)
+			el.className = el.className.replace(className, '');
+		else
+			el.className += " " + className;
+	}
 	
 	// Collapse playlist
 	function _collapsePlaylist()
@@ -332,9 +567,9 @@ function ytqnp() {
 		{	
 			// open the list
 			var pc = document.querySelector('#qnp-playlist-container');
-			pc.className = "watch-playlist"; 
+			_toggleClass(pc, 'collapsed');
 			var pl = document.querySelector("#qnp-playlist");
-			pl.className = "playlist-videos-list yt-uix-scroller";
+			_toggleClass(pl, 'collapsed');
 			
 			// Set the icon
 			document.querySelector('#qnp-collapser').className = "yt-uix-button-icon qnp-btn-playlist-collapse-out yt-sprite";
@@ -344,9 +579,9 @@ function ytqnp() {
 		{
 			// Close it
 			var pc = document.querySelector('#qnp-playlist-container');
-			pc.className = "watch-playlist collapsed"; 
+			_toggleClass(pc, 'collapsed');
 			var pl = document.querySelector("#qnp-playlist");
-			pl.className = "playlist-videos-list yt-uix-scroller collapsed";
+			_toggleClass(pl, 'collapsed');
 			
 			// Set the icon
 			document.querySelector('#qnp-collapser').className = "yt-uix-button-icon qnp-btn-playlist-collapse-in yt-sprite";		
@@ -384,7 +619,7 @@ function ytqnp() {
 		
 			// Remove the minimize state
 			var pc = document.querySelector('#qnp-playlist-container');
-			pc.className = "watch-playlist"; 
+			pc.className += " watch-player-playlist watch-playlist"; 
 			var pl = document.querySelector("#qnp-playlist");
 			pl.className = "playlist-videos-list yt-uix-scroller";
 			document.querySelector('a[data-collapse]').setAttribute('data-collapse', 'false');

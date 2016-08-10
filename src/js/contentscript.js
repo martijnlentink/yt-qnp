@@ -38,7 +38,7 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 			// So if Seek 'n Play is installed, subscribe to the events
 			var player = circularify.ytapi.getPlayer();
 			// Subscribe to the onStateChange event on the player object
-			player.addEventListener("onStateChange", circularify.ytqnp.next);
+			// player.addEventListener("onStateChange", circularify.ytqnp.next);
 		}
 
 		function _snpRegistered(ev) {

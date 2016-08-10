@@ -4,6 +4,10 @@
 
 /* Buttons */
 
+[ng-cloak] {
+	display: none !important;
+}
+
 .qnp-button { 
 	display: block; 
 	margin-top: -23px; 
@@ -56,7 +60,7 @@
 
 /* Playlist */
 
-.qnp-playlist-container { 
+#qnp-playlist-container { 
 	width: 480px; 
 	height: 200px; 
 	position: fixed; 
