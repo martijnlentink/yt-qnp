@@ -24,12 +24,6 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 		circularify.utils.executeOrSubscribeOtherwise(2000, circularify.core.events.extRegistered, { id: 'snp' }, _snpRegistered, _failedToRegister);
 		circularify.utils.executeOrSubscribe(circularify.core.events.extRegistered, _qnpRegistered, { id: 'qnp' });
 
-		// Navigating function
-		function _qnpNavigating(ev)
-		{
-			circularify.ytqnp.navigating(ev.detail.url);
-		}
-
 		function _registerPlayerEvents() {
 			circularify.debug.log("Call to register");
 			if (_isRegistered)
@@ -55,7 +49,6 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 		}
 
 		function _qnpRegistered(ev) {
-			window.addEventListener("spfdone", _qnpNavigating);
 		}
 
 		function _failedToRegister() {
