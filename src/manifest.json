@@ -44,7 +44,10 @@
 		"js/dd.js",
 		"js/ytqnp.js",
 		"css/ytqnp.css",
-		"html/upgrade-snp.html"
+		"html/upgrade-snp.html",
+		"html/playlist.html",
+		"html/plus.html",
+		"html/mini.html"
 	],
 	
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",

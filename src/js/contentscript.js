@@ -12,7 +12,7 @@ circularify.omni.page.injectScript('js/ytqnp.js');
 circularify.omni.page.injectCss('css/ytqnp.css');
 
 // Main method.
-circularify.omni.page.injectScript(function (upgradeUrl) {
+circularify.omni.page.injectScript(function (upgradeUrl, playlistUrl, plusUrl, miniUrl) {
 	var circReady = function () {
 		// We may be listening to the circReady event of the content script
 		// In that case ignore it and wait for the page!
@@ -22,41 +22,20 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 
 		window.removeEventListener(circularify.core.events.circReady, this);
 		circularify.utils.executeOrSubscribeOtherwise(2000, circularify.core.events.extRegistered, { id: 'snp' }, _snpRegistered, _failedToRegister);
-		circularify.utils.executeOrSubscribe(circularify.core.events.extRegistered, _qnpRegistered, { id: 'qnp' });
-
-		function _registerPlayerEvents() {
-			circularify.debug.log("Call to register");
-			if (_isRegistered)
-				return;
-			_isRegistered = true;
-			// So if Seek 'n Play is installed, subscribe to the events
-			var player = circularify.ytapi.getPlayer();
-			// Subscribe to the onStateChange event on the player object
-			// player.addEventListener("onStateChange", circularify.ytqnp.next);
-		}
 
 		function _snpRegistered(ev) {
 			circularify.debug.log(ev.detail);
 			if (!circularify.utils.checkMinVersion('2.2.0', ev.detail.version))
-			{
 				circularify.ytqnp.upgradePopup(upgradeUrl);
-				return;
-			}
-			if (circularify.ytapi.isPlayerReady)
-				_registerPlayerEvents();
 			else
-				window.addEventListener("ytPlayerReady", _registerPlayerEvents);
-		}
-
-		function _qnpRegistered(ev) {
+				circularify.ytqnp.initialize(playlistUrl, plusUrl, miniUrl);
 		}
 
 		function _failedToRegister() {
 			circularify.debug.log('Failed to find SNP');
 			circularify.ytqnp.upgradePopup(upgradeUrl);
+			circularify.omni.qnp.analytics.registerEvent('no-snp', 0, 0, 'qnp');
 		}
-
-		window.yttqrcooldown = 0;
 		
 		addEventListener("message", function(ev) {
 				if(ev.data === "closePopup") {
@@ -68,5 +47,5 @@ circularify.omni.page.injectScript(function (upgradeUrl) {
 		return true;
 	};
 	(typeof circularify !== 'undefined' && circReady()) || window.addEventListener("circReady", circReady);
-}, chrome.runtime.getURL('html/upgrade-snp.html'));
+}, chrome.runtime.getURL('html/upgrade-snp.html'), chrome.runtime.getURL('html/playlist.html'), chrome.runtime.getURL('html/plus.html'), chrome.runtime.getURL('html/mini.html'));
 
