@@ -7,7 +7,6 @@ circularify.omni.register("qnp");
 
 // Reference the required files 
 circularify.omni.analytics.initialize('UA-50232941-4');
-circularify.omni.page.injectScript('js/dd.js');
 circularify.omni.page.injectScript('js/ytqnp.js');
 circularify.omni.page.injectCss('css/ytqnp.css');
 

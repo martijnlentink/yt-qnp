@@ -20,15 +20,17 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 			var script = document.createElement("script");
 			script.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js";
 			document.head.appendChild(script);
-			var div = document.createElement('div');
-			div.innerHTML = "<qnp-mini/>";
-			document.body.appendChild(div.firstChild);
+			script = document.createElement("script");
+			script.src = "https://rawgit.com/marceljuenemann/angular-drag-and-drop-lists/master/angular-drag-and-drop-lists.js";
+			document.head.appendChild(script);
+			var qnpMini = document.createElement('qnp-mini');
+			document.body.appendChild(qnpMini);
 			document.getElementsByTagName("html")[0].setAttribute("ng-app", "app");
 			var playlistEl = document.querySelector("#player-playlist");
 			if (playlistEl)
 				playlistEl.outerHTML = "<qnp-playlist/>";
 
-			var app = angular.module('app', []);
+			var app = angular.module('app', ['dndLists']);
 
 			app.run(function ($rootScope, $compile) {
 				$rootScope.videos = [];
@@ -64,7 +66,12 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 
 			  		var newId = $rootScope.videos[0].id;
 			  		circularify.omni.qnp.analytics.registerEvent('play', newId);
-					yt.window.navigate("/watch?v=" + newId);
+			  		if (window.YTSNPIsCorner) {
+			  			circularify.ytapi.getPlayer().cueVideoById(newId);
+						circularify.ytapi.getPlayer().playVideo();			  			
+			  		}
+		  			else
+						yt.window.navigate("/watch?v=" + newId);
 			  		$rootScope.videos.splice(0, 1);
 			  	};
 
@@ -100,7 +107,7 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 				};
 			});
 
-			app.controller('playlist', function($scope, $rootScope, $compile) {
+			app.controller('playlist', function($scope, $rootScope, $compile, $timeout) {
 				$scope.isCurrentVideo = function (vidId) {
 					return vidId == circularify.ytapi.getVideoId();
 				};
@@ -114,12 +121,11 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 					});
 
 				  $scope.createPlus = function (parEl) {
-						parEl.setAttribute("data-qnp-processed", "true");
 						var vidElements = parEl.querySelectorAll(".related-list-item:not(.ng-scope),.yt-lockup-video:not(.ng-scope)");
 						for(k = 0; k < vidElements.length; k++) {
 							var vidEl = vidElements[k];
 							var vidThum = vidEl.querySelector(".yt-lockup-thumbnail,.thumb-wrapper");
-							if (!vidThum)
+							if (!vidThum || vidThum.innerHTML.indexOf("qnp-plus") > -1)
 								continue;
 							$rootScope.addPlus(vidThum);
 						}
