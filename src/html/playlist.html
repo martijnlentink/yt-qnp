@@ -39,7 +39,7 @@
 				</div>
 			</div>
 			<div class="playlist-videos-container yt-scrollbar-dark yt-scrollbar">
-				<ol dnd-list="videos" style="top: 70px;" id="playlist-autoscroll-list" class="playlist-videos-list yt-uix-scroller" data-scroll-action="yt.www.watch.lists.loadThumbnails" data-scroller-mousewheel-listener="" data-scroller-scroll-listener="" data-scroller-offset="0"> 
+				<ol dnd-list="videos" id="playlist-autoscroll-list" class="playlist-videos-list yt-uix-scroller" data-scroll-action="yt.www.watch.lists.loadThumbnails" data-scroller-mousewheel-listener="" data-scroller-scroll-listener="" data-scroller-offset="0"> 
 					<li ng-repeat="video in videos" class="yt-uix-scroller-scroll-unit" ng-class="{ 'currently-playing' : isCurrentVideo(video.id) }" dnd-draggable="video" dnd-moved="videos.splice($index, 1)" dnd-effect-allowed="move">
 						<a class="yt-uix-button-player-controls" title="Remove item" data-tooltip-text="Remove item" ng-click="remove($index)" style="float: right;">
 							<span class="yt-uix-button-icon-wrapper">

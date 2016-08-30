@@ -26,7 +26,7 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 
 			var app = angular.module('app', ['dndLists']);
 
-			app.run(function ($rootScope, $compile) {
+			app.run(["$rootScope", "$compile", function ($rootScope, $compile) {
 				$rootScope.videos = [];
 				$rootScope.isInitialized = false;
 
@@ -78,30 +78,30 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 			  		var compiled = $compile("<qnp-plus/>")($rootScope);
 			  		el.append(compiled);
 			  	};
-			});
+			}]);
 
-			app.directive("qnpMini", function ($compile, $sce) {
+			app.directive("qnpMini", ["$compile", "$sce", function ($compile, $sce) {
 				return {
 					templateUrl: $sce.trustAsResourceUrl(miniTemplateUrl),
 					restrict: 'E'
 				};
-			});
+			}]);
 
-			app.directive("qnpPlus", function ($compile, $sce) {
+			app.directive("qnpPlus", ["$compile", "$sce", function ($compile, $sce) {
 				return {
 					templateUrl: $sce.trustAsResourceUrl(plusTemplateUrl),
 					restrict: 'E'
 				};
-			});
+			}]);
 
-			app.directive("qnpPlaylist", function ($compile, $sce) {
+			app.directive("qnpPlaylist", ["$compile", "$sce", function ($compile, $sce) {
 				return {
 					templateUrl: $sce.trustAsResourceUrl(playlistTemplateUrl),
 					restrict: 'E'
 				};
-			});
+			}]);
 
-			app.controller('playlist', function($scope, $rootScope, $compile, $timeout) {
+			app.controller('playlist', ["$scope", "$rootScope", "$compile", "$timeout", function($scope, $rootScope, $compile, $timeout) {
 				$scope.isCurrentVideo = function (vidId) {
 					return vidId == circularify.ytapi.getVideoId();
 				};
@@ -169,9 +169,9 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 				};
 				initPlusListener();
 				$rootScope.isInitialized = true;
-			});
+			}]);
 
-			app.controller('mini-playlist', function ($scope, $rootScope, $compile) {
+			app.controller('mini-playlist', ["$scope", "$rootScope", "$compile", function ($scope, $rootScope, $compile) {
 				$scope.isHidden = !window.YTSNPIsCorner;
 				$scope.isCollapsed = false;
 
@@ -189,7 +189,7 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 					$scope.hide(!window.YTSNPIsCorner);
 					$scope.$apply();
 				});
-			});
+			}]);
 
 			angular.bootstrap(document, ['app']);
 		});

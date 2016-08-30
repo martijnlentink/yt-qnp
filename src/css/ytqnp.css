@@ -4,6 +4,14 @@
 
 /* Buttons */
 
+qnp-playlist #player-playlist .playlist-videos-list {
+	top: 61px;
+}
+
+#placeholder-playlist.hid {
+	display: block !important;
+}
+
 [ng-cloak] {
 	display: none !important;
 }
