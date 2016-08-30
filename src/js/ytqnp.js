@@ -15,14 +15,8 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 			return;
 		_isInit = true;
 
-		if (!angular || !angular.bootstrap)
+		circularify.utils.wait(function () { return typeof angular !== "undefined" }, function ()
 		{
-			var script = document.createElement("script");
-			script.src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js";
-			document.head.appendChild(script);
-			script = document.createElement("script");
-			script.src = "https://rawgit.com/marceljuenemann/angular-drag-and-drop-lists/master/angular-drag-and-drop-lists.js";
-			document.head.appendChild(script);
 			var qnpMini = document.createElement('qnp-mini');
 			document.body.appendChild(qnpMini);
 			document.getElementsByTagName("html")[0].setAttribute("ng-app", "app");
@@ -196,7 +190,9 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 					$scope.$apply();
 				});
 			});
-		}
+
+			angular.bootstrap(document, ['app']);
+		});
 	}
 
 

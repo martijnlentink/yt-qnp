@@ -3,7 +3,7 @@
 	
 	"name": "Queue 'n Play for YouTube™",
 	"description": "__MSG_appDescription__",
-	"version": "1.0.0",  
+	"version": "2.0.0",  
 	"homepage_url": "https://chrome.google.com/webstore/detail/aeacgaahiiiemomjmmdcekmpkgcgfkff",
 	"short_name": "Queue 'n Play",
 
@@ -24,6 +24,13 @@
 	},
 
 	"content_scripts": [
+		{
+			"matches": ["*://*.youtube.com/*"],
+			"js": [
+				"js/injectangular.js"
+			],
+			"run_at": "document_start"
+		},
 		{
 			"matches": ["*://*.youtube.com/*"],
 			"js": [
