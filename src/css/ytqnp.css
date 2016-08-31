@@ -41,11 +41,14 @@ qnp-playlist #player-playlist .playlist-videos-list {
 } 
 
 .qnp-btn-playlist-close { 
-	background: no-repeat url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp) -364px -209px; 
+	background: no-repeat url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp) -363px -209px; 
 	background-size: auto; 
-	width: 9px; 
-	height: 9px;
-} 
+	width: 10px; 
+	height: 10px;
+}
+li:hover .qnp-btn-playlist-close {
+	background: no-repeat url('http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp') -149px 0;
+}
 
 .qnp-li-remove {
 	float: right;
