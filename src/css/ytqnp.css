@@ -46,7 +46,7 @@ qnp-playlist #player-playlist .playlist-videos-list {
 	width: 10px; 
 	height: 10px;
 }
-li:hover .qnp-btn-playlist-close {
+#player-playlist li:hover .qnp-btn-playlist-close {
 	background: no-repeat url('http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp') -149px 0;
 }
 
