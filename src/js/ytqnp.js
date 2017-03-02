@@ -155,10 +155,15 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 						var observer = new MutationObserver(function (mutations) {
 							for(var i=0; i<mutations.length; ++i) {
 								//yt-lockup-thumbnail
+						        // related-list-item
 						        // look through all added nodes of this mutation
 						        for(var j=0; j<mutations[i].addedNodes.length; ++j) {
-						        	if ( (mutations[i].addedNodes[j].innerHTML || "").indexOf("yt-lockup-video") > -1) {
+						        	var html = mutations[i].addedNodes[j].innerHTML || "";
+						        	if (html.indexOf("yt-lockup-video") > -1) {
 						        		$scope.$apply($scope.createPlus(mutations[i].addedNodes[j]));
+						        	}
+						        	if (html.indexOf("related-item-dismissable") > -1) {
+						        		$scope.$apply($scope.createPlus(mutations[i].addedNodes[j].parentNode));
 						        	}
 						        }
 						    }
