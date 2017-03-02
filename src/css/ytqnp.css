@@ -40,6 +40,16 @@ qnp-playlist #player-playlist .playlist-videos-list {
 	height: 21px; 
 } 
 
+.qnp-button.clicked {
+	background: no-repeat url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp) -537px -241px;
+	background-color: #f0f0f0; 
+}
+
+.qnp-button.clicked:hover:not(:focus) {
+	background: no-repeat url('http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp') -462px -343px; 
+	background-color: #f0f0f0; 
+}
+
 .qnp-btn-playlist-close { 
 	background: no-repeat url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp) -363px -209px; 
 	background-size: auto; 

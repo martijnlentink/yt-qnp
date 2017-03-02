@@ -32,6 +32,8 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 
 				$rootScope.queueVideo = function(el) {
 					var el = event.target;
+					el.className += ' clicked';
+					
 					while (el.tagName != "LI")
 						el = el.parentNode;
 
