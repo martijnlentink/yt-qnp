@@ -4,6 +4,18 @@
 
 /* Buttons */
 
+qnp-playlist #player-playlist .playlist-videos-list {
+	top: 61px;
+}
+
+#placeholder-playlist.hid {
+	display: block !important;
+}
+
+[ng-cloak] {
+	display: none !important;
+}
+
 .qnp-button { 
 	display: block; 
 	margin-top: -23px; 
@@ -29,11 +41,14 @@
 } 
 
 .qnp-btn-playlist-close { 
-	background: no-repeat url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp) -364px -209px; 
+	background: no-repeat url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp) -363px -209px; 
 	background-size: auto; 
-	width: 9px; 
-	height: 9px;
-} 
+	width: 10px; 
+	height: 10px;
+}
+#player-playlist li:hover .qnp-btn-playlist-close {
+	background: no-repeat url('http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfl827A2L.webp') -149px 0;
+}
 
 .qnp-li-remove {
 	float: right;
@@ -56,7 +71,7 @@
 
 /* Playlist */
 
-.qnp-playlist-container { 
+#qnp-playlist-container { 
 	width: 480px; 
 	height: 200px; 
 	position: fixed; 
