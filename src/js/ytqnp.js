@@ -26,12 +26,40 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 
 			var app = angular.module('app', ['dndLists']);
 
-			app.run(["$rootScope", "$compile", function ($rootScope, $compile) {
+			app.run(["$rootScope", "$compile", '$http', function ($rootScope, $compile, $http) {
 				$rootScope.videos = [];
 				$rootScope.isInitialized = false;
 
+				$rootScope.loadPlaylist = function () {
+					matches = /[\&\?]list=([^#\&\?]+)/g.exec(window.location.href);
+					if (matches && matches.length)
+					{
+						$http.get('https://www.youtube.com/list_ajax?style=json&action_get_list=1&list=' + matches[1]).then(function (result) {
+							var playlist = result.data;
+
+							$rootScope.videos.length = 0;
+							for (var i = 0; i < playlist.video.length; i++) {
+								var vid = playlist.video[i];
+
+								$rootScope.videos.push({
+									title: vid.title,
+									author: vid.author,
+									id: vid.encrypted_id
+								});
+							}
+						});
+					}
+				};
+
 				$rootScope.queueVideo = function(el) {
 					var el = event.target;
+					el.classList.add('clicked');
+					(function (element) {
+						setTimeout(function () {
+							element.classList.remove('clicked');
+						}, 1000);
+					})(el);
+
 					while (el.tagName != "LI")
 						el = el.parentNode;
 
@@ -78,6 +106,8 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 			  		var compiled = $compile("<qnp-plus/>")($rootScope);
 			  		el.append(compiled);
 			  	};
+
+			  	$rootScope.loadPlaylist();
 			}]);
 
 			app.directive("qnpMini", ["$compile", "$sce", function ($compile, $sce) {
@@ -101,7 +131,7 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 				};
 			}]);
 
-			app.controller('playlist', ["$scope", "$rootScope", "$compile", "$timeout", function($scope, $rootScope, $compile, $timeout) {
+			app.controller('playlist', ["$scope", "$rootScope", "$compile", "$timeout", "$http", function($scope, $rootScope, $compile, $timeout, $http) {
 				$scope.isCurrentVideo = function (vidId) {
 					return vidId == circularify.ytapi.getVideoId();
 				};
@@ -140,6 +170,9 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 						placeholder.className = placeholder.className.replace("hid", '');
 						angular.element(placeholder).append(qnpPlaylist);
 					}
+
+					$rootScope.loadPlaylist();
+
 					if (placeholder)
 						placeholder.className = "watch-playlist player-height";
 					$scope.$apply();
@@ -155,10 +188,15 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 						var observer = new MutationObserver(function (mutations) {
 							for(var i=0; i<mutations.length; ++i) {
 								//yt-lockup-thumbnail
+						        // related-list-item
 						        // look through all added nodes of this mutation
 						        for(var j=0; j<mutations[i].addedNodes.length; ++j) {
-						        	if ( (mutations[i].addedNodes[j].innerHTML || "").indexOf("yt-lockup-video") > -1) {
+						        	var html = mutations[i].addedNodes[j].innerHTML || "";
+						        	if (html.indexOf("yt-lockup-video") > -1) {
 						        		$scope.$apply($scope.createPlus(mutations[i].addedNodes[j]));
+						        	}
+						        	if (html.indexOf("related-item-dismissable") > -1) {
+						        		$scope.$apply($scope.createPlus(mutations[i].addedNodes[j].parentNode));
 						        	}
 						        }
 						    }
