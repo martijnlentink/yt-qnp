@@ -53,7 +53,12 @@ circularify.ytqnp = circularify.ytqnp || (function () {
 
 				$rootScope.queueVideo = function(el) {
 					var el = event.target;
-					el.className += ' clicked';
+					el.classList.add('clicked');
+					(function (element) {
+						setTimeout(function () {
+							element.classList.remove('clicked');
+						}, 1000);
+					})(el);
 
 					while (el.tagName != "LI")
 						el = el.parentNode;
